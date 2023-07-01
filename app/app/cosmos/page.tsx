@@ -1,6 +1,7 @@
 import { json } from "stream/consumers";
 import { Undelegation } from "../models/Undelegation";
 import BarChart from "../components/BarChart";
+import DateFocus from "../components/DateFocus";
 
 
 async function loadData() {
@@ -55,14 +56,14 @@ export default async function Home() {
 
   const sortedData = data?.filter((u1: Undelegation) => {
     return u1.COMPLETION_TIME > currentTime
-  }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT).slice(0, 5);
+  }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-      <BarChart chartData={groupedData.slice(groupedData.length - 5, groupedData.length)} />
-      <ul>
-        {sortedData?.map((a: Undelegation) => <li>{a.AMOUNT}, {a.DATE_STR}, {a.TX_FROM}</li>)}
-      </ul>
+      <BarChart chartData={groupedData.slice(groupedData.length - 20, groupedData.length)} />
+      {
+        //<DateFocus sortedData={sortedData} date={'2023-07-05'} />
+      }
     </div>
   </main>
 }
