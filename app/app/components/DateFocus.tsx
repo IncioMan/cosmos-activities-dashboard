@@ -76,7 +76,7 @@ function DateFocus({ sortedData }: Props) {
                         <SelectValue placeholder="Select a date" />
                     </SelectTrigger>
                     <SelectContent>
-                        {Array.from(new Set(sortedData?.map(a => a.DATE_STR))).sort((a, b) => a.localeCompare(b)).map(s => <SelectItem value={s}>{s}</SelectItem>)}
+                        {Array.from(new Set(sortedData?.map(a => a.DATE_STR))).sort((a, b) => a.localeCompare(b)).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                 </Select>
             </div>
