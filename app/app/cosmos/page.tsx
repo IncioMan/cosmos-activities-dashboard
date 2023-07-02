@@ -60,7 +60,7 @@ export default async function Home() {
   return <>
     <div className="min-h-screen flex flex-col p-4">
       <div className="h-full flex flex-1 items-center justify-center space-x-4 md:px-24">
-        <div className="w-2/3 h-full">
+        <div className="w-2/3 h-full" style={{ height: "500px" }}>
           <BarChart chartData={groupedData} />
         </div>
         <div className="w-1/3">
