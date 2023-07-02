@@ -37,7 +37,7 @@ function BarChart({ chartData }: Props) {
         <Bar
             ref={chartRef}
             data={data}
-            height={600}
+            height={500}
             options={{
                 events: ['click'],
                 onClick: handleClick,

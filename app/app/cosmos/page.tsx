@@ -2,6 +2,7 @@ import { json } from "stream/consumers";
 import { Undelegation } from "../models/Undelegation";
 import BarChart from "../components/BarChart";
 import DateFocus from "../components/DateFocus";
+import { FaGithub, FaTwitter } from 'react-icons/fa';
 
 
 async function loadData() {
@@ -57,13 +58,23 @@ export default async function Home() {
   const groupedData = sortedData ? groupData(sortedData) : []
 
   return <>
-    <main className="min-h-screen flex items-center justify-center space-x-4 p-2 md:px-12">
-      <div className="w-2/3 h-full">
-        <BarChart chartData={groupedData} />
+    <div className="min-h-screen flex flex-col p-4">
+      <div className="h-full flex flex-1 items-center justify-center space-x-4 md:px-24">
+        <div className="w-2/3 h-full">
+          <BarChart chartData={groupedData} />
+        </div>
+        <div className="w-1/3">
+          <DateFocus sortedData={sortedData} />
+        </div>
       </div>
-      <div className="w-1/3">
-        <DateFocus sortedData={sortedData} date={'2023-07-03'} />
+      <div className="flex justify-center space-x-4">
+        <a href="https://github.com/IncioMan" target="_blank">
+          <FaGithub style={{ fontSize: '25px' }} color="#536471" />
+        </a>
+        <a href="https://twitter.com/IncioMan" target="_blank">
+          <FaTwitter style={{ fontSize: '25px' }} color="#536471" />
+        </a>
       </div>
-    </main>
+    </div>
   </>
 }

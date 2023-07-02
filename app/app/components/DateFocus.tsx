@@ -53,11 +53,13 @@ function DateFocus({ sortedData }: Props) {
 
     const options = {
         plugins: {
+            responsive: false,
             legend: {
-                position: 'right'
+                position: "right" as const
             },
             colors: {
-                enabled: false
+                enabled: true,
+                forceOverride: true
             }
         },
         layout: {
@@ -75,7 +77,7 @@ function DateFocus({ sortedData }: Props) {
                         <SelectValue placeholder="Select a date" />
                     </SelectTrigger>
                     <SelectContent>
-                        {[...new Set(sortedData?.map(a => a.DATE_STR))].sort((a, b) => a.localeCompare(b)).map(s => <SelectItem value={s}>{s}</SelectItem>)}
+                        {Array.from(new Set(sortedData?.map(a => a.DATE_STR))).sort((a, b) => a.localeCompare(b)).map(s => <SelectItem value={s}>{s}</SelectItem>)}
                     </SelectContent>
                 </Select>
             </div>
@@ -98,14 +100,14 @@ function DateFocus({ sortedData }: Props) {
                         filteredData?.map((a: Undelegation) => {
                             return <TableRow>
                                 <TableCell>{a.DATE_STR}</TableCell>
-                                <TableCell>{a.ADDRESS_SHORT}</TableCell>
+                                <TableCell><a href={`https://www.mintscan.io/cosmos/account/${a.TX_FROM}`} className='font-medium text-blue-600 dark:text-blue-500 hover:underline' target="blank">{a.ADDRESS_SHORT}</a></TableCell>
                                 <TableCell className="text-right">{a.AMOUNT}</TableCell>
                             </TableRow>
                         })
                     }
                 </TableBody>
             </Table>
-        </div>
+        </div >
     )
 }
 
