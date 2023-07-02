@@ -39,7 +39,16 @@ function BarChart({ chartData }: Props) {
             data={data}
             options={{
                 events: ['click'],
-                onClick: handleClick
+                onClick: handleClick,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Undelegating ATOM'
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
             }} />
     )
 }
