@@ -55,7 +55,8 @@ function DateFocus({ sortedData }: Props) {
         plugins: {
             responsive: false,
             legend: {
-                position: "right" as const
+                position: "right" as const,
+                display: false
             },
             colors: {
                 enabled: true,
@@ -63,9 +64,7 @@ function DateFocus({ sortedData }: Props) {
             }
         },
         layout: {
-            padding: {
-                bottom: 5
-            }
+            padding: 40
         }
     }
 
