@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Undelegation } from '../models/Undelegation'
 import {
     Table,
@@ -10,21 +10,37 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS } from 'chart.js/auto'
+import { Colors } from 'chart.js';
+ChartJS.register(Colors);
 import { CategoryScale } from 'chart.js';
 ChartJS.register(CategoryScale);
 
 
 interface Props {
     sortedData: Undelegation[] | undefined
-    date: string | undefined
 }
 
-function DateFocus({ sortedData, date }: Props) {
+function DateFocus({ sortedData }: Props) {
 
-    const filteredData = sortedData?.filter((a: Undelegation) => a.DATE_STR === date)
-    const sum = filteredData?.map(a => a.AMOUNT).reduce((total, amount) => total + amount)
+    const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0])
+    const [filteredData, setFilteredData] = useState<Undelegation[] | undefined>([])
+
+    useEffect(() => {
+        setFilteredData(sortedData?.filter((a: Undelegation) => a.DATE_STR === date))
+    }, [date, sortedData])
+
 
     const data = {
         labels: filteredData?.map(a => a.TX_FROM),
@@ -39,22 +55,37 @@ function DateFocus({ sortedData, date }: Props) {
         plugins: {
             legend: {
                 position: 'right'
+            },
+            colors: {
+                enabled: false
+            }
+        },
+        layout: {
+            padding: {
+                bottom: 5
             }
         }
     }
 
     return (
-        <div className='p-2'>
-            <div className='p-8'>
+        <div className='p-2 flex flex-col'>
+            <div className='w-full flex items-center justify-center'>
+                <Select onValueChange={(e) => setDate(e)} defaultValue={date}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select a date" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {[...new Set(sortedData?.map(a => a.DATE_STR))].sort((a, b) => a.localeCompare(b)).map(s => <SelectItem value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className='px-8'>
                 <Doughnut
                     data={data}
                     options={options}
                 />
             </div>
             <Table>
-                {
-                    <TableCaption>Total undelegating ATOM: {sum}</TableCaption>
-                }
                 <TableHeader>
                     <TableRow>
                         <TableHead>Date</TableHead>
@@ -67,7 +98,7 @@ function DateFocus({ sortedData, date }: Props) {
                         filteredData?.map((a: Undelegation) => {
                             return <TableRow>
                                 <TableCell>{a.DATE_STR}</TableCell>
-                                <TableCell>{a.TX_FROM}</TableCell>
+                                <TableCell>{a.ADDRESS_SHORT}</TableCell>
                                 <TableCell className="text-right">{a.AMOUNT}</TableCell>
                             </TableRow>
                         })

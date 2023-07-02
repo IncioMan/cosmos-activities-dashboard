@@ -37,9 +37,11 @@ function BarChart({ chartData }: Props) {
         <Bar
             ref={chartRef}
             data={data}
+            height={600}
             options={{
                 events: ['click'],
                 onClick: handleClick,
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: true,

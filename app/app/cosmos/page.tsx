@@ -13,6 +13,7 @@ async function loadData() {
     jsonData.map((u: Undelegation) => {
       u.COMPLETION_TIME = new Date(u.COMPLETION_TIME)
       u.DATE_STR = u.COMPLETION_TIME.toISOString().split("T")[0];
+      u.ADDRESS_SHORT = u.TX_FROM.slice(0, 10) + '...' + u.TX_FROM.slice(u.TX_FROM.length - 5, u.TX_FROM.length);
     })
 
     return jsonData
@@ -51,21 +52,18 @@ export default async function Home() {
   const data: Undelegation[] | undefined = await loadData();
   const currentTime = new Date();
   const sortedData = data?.filter((u1: Undelegation) => {
-    if (u1.COMPLETION_TIME.getMonth() == 6) {
-      console.log(u1.COMPLETION_TIME, currentTime, u1.COMPLETION_TIME >= currentTime)
-    }
     return u1.COMPLETION_TIME >= currentTime
   }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);
   const groupedData = sortedData ? groupData(sortedData) : []
 
-  return <main className="flex min-h-screen flex-col items-center justify-between p-2 md:p-24">
-    <div className="w-full flex flex-col justify-center items-center">
-      <div className="w-full">
+  return <>
+    <main className="min-h-screen flex items-center justify-center space-x-4 p-2 md:px-12">
+      <div className="w-2/3 h-full">
         <BarChart chartData={groupedData} />
       </div>
-      <div className="">
+      <div className="w-1/3">
         <DateFocus sortedData={sortedData} date={'2023-07-03'} />
       </div>
-    </div>
-  </main>
+    </main>
+  </>
 }
