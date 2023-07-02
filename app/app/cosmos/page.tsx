@@ -49,21 +49,23 @@ function groupData(jsonData: Undelegation[]) {
 
 export default async function Home() {
   const data: Undelegation[] | undefined = await loadData();
-  const groupedData = data ? groupData(data) : []
   const currentTime = new Date();
-
-  console.log(groupedData)
-
   const sortedData = data?.filter((u1: Undelegation) => {
-    return u1.COMPLETION_TIME > currentTime
+    if (u1.COMPLETION_TIME.getMonth() == 6) {
+      console.log(u1.COMPLETION_TIME, currentTime, u1.COMPLETION_TIME >= currentTime)
+    }
+    return u1.COMPLETION_TIME >= currentTime
   }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);
+  const groupedData = sortedData ? groupData(sortedData) : []
 
-  return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-      <BarChart chartData={groupedData.slice(groupedData.length - 20, groupedData.length)} />
-      {
-        //<DateFocus sortedData={sortedData} date={'2023-07-05'} />
-      }
+  return <main className="flex min-h-screen flex-col items-center justify-between p-2 md:p-24">
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="w-full">
+        <BarChart chartData={groupedData} />
+      </div>
+      <div className="">
+        <DateFocus sortedData={sortedData} date={'2023-07-03'} />
+      </div>
     </div>
   </main>
 }
