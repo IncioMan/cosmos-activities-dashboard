@@ -101,7 +101,7 @@ function DateFocus({ sortedData }: Props) {
                 <TableBody>
                     {
                         filteredData?.map((a: Undelegation) => {
-                            return <TableRow>
+                            return <TableRow key={""}>
                                 <TableCell>{a.DATE_STR}</TableCell>
                                 <TableCell><a href={`https://www.mintscan.io/cosmos/account/${a.TX_FROM}`} className='font-medium text-blue-600 dark:text-blue-500 hover:underline' target="blank">{a.ADDRESS_SHORT}</a></TableCell>
                                 <TableCell className="text-right">{a.AMOUNT}</TableCell>
