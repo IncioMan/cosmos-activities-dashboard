@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 import time
+import re
 
 def parse_tx(tx):
     val_dict = {}
@@ -10,8 +11,17 @@ def parse_tx(tx):
     for event in tx['events']:
         if(event['type'] == 'transfer'):
             for attr in event['attributes']:
-                if(attr['key'] in ['recipient','sender','amount']):
+                if(attr['key'] in ['recipient','sender']):
                     val_dict[attr['key']] = attr['value']
+                if(attr['key'] in ['amount']):
+                    tmp_amount = attr['value']
+                    # Extracting the number part
+                    amount_part = re.search(r'\d+', tmp_amount).group()
+                    # Extracting the text part
+                    valuta_part = tmp_amount.replace(amount_part,'')
+                    val_dict['valuta'] = valuta_part
+                    val_dict['amount'] = amount_part
+
     return val_dict
 
 df = None
@@ -50,4 +60,4 @@ while True:
         # Handle any errors that occurred during the request
         print("Error:", response.status_code)
 
-df.to_csv(f'{address}.csv', index=False)
+df.to_csv(f'data/{address}.csv', index=False)
