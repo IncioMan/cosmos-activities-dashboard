@@ -43,7 +43,7 @@ export const BarChart = () => {
                 {
                     "name": "color",
                     "type": "sequential",
-                    "domain": { "data": "table", "field": "returnAmount" },
+                    "domain": { "data": "table", "field": "Total_astro" },
                     "range": { "interpolate": "rgb", "scheme": "blues" }
                 }
             ],
@@ -54,7 +54,7 @@ export const BarChart = () => {
                     "from": { "data": "table" },
                     "encode": {
                         "enter": {
-                            "fill": { "scale": "color", "field": "returnAmount" },
+                            "fill": { "scale": "color", "field": "Total_astro" },
                             "xfocus": { "signal": "cx" },
                             "yfocus": { "signal": "cy" }
                         },
