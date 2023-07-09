@@ -43,7 +43,7 @@ export const BarChart = () => {
                     "name": "color",
                     "type": "sequential",
                     "domain": { "data": "table", "field": "Total_astro" },
-                    "range": { "interpolate": "rgb", "scheme": "blues" }
+                    "range": { "interpolate": "rgb", "scheme": "yelloworangered" }
                 }
             ],
             "marks": [
@@ -59,7 +59,7 @@ export const BarChart = () => {
                         },
                         "update": {
                             "size": { "signal": "pow(datum.returnAmount,1.2)", "scale": "size" },
-                            "stroke": { "value": "white" },
+                            "stroke": { "value": "#37609f" },
                             "strokeWidth": { "value": 1 },
                             "tooltip": { "signal": "datum" }
                         }
@@ -90,8 +90,14 @@ export const BarChart = () => {
     return (
         <>
             {(spec) && <Vega spec={spec} actions={false} />}
-            <button onClick={() => { setRangeUp(rangeUp + 1000) }}>Zoom In</button>
-            <button onClick={() => { setRangeUp(5000) }}>Reset</button>
+            <div className='flex flex-col space-y-4 w-[180px] h-16'>
+                <div className='w-full'>
+                    <button onClick={() => { setRangeUp(rangeUp + 1000) }}>Zoom In</button>
+                </div>
+                <div>
+                    <button onClick={() => { setRangeUp(5000) }}>Reset</button>
+                </div>
+            </div>
         </>
     )
 }
