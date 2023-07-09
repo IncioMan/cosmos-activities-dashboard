@@ -52,6 +52,9 @@ function groupData(jsonData: Undelegation[]) {
 export default async function Home() {
   const data: Undelegation[] | undefined = await loadData();
   const currentTime = new Date();
+  // 30 days back in time
+  currentTime.setDate(currentTime.getDate() - 30);
+  //
   const sortedData = data?.filter((u1: Undelegation) => {
     return u1.COMPLETION_TIME >= currentTime
   }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);

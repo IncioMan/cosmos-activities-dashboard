@@ -79,7 +79,7 @@ function DateFocus({ sortedData }: Props) {
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select a date" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="h-[400px]">
                         {Array.from(new Set(sortedData?.map(a => a.DATE_STR))).sort((a, b) => a.localeCompare(b)).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                 </Select>
@@ -109,7 +109,7 @@ function DateFocus({ sortedData }: Props) {
                         })
                     }
                 </TableBody>
-            </Table>
+            </Table >
         </div >
     )
 }
