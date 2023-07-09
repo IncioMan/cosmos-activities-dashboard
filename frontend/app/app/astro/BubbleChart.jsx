@@ -13,9 +13,9 @@ export const BarChart = () => {
         }
         setSpec({
             "$schema": "https://vega.github.io/schema/vega/v5.json",
-            "width": 1000,
+            "width": 800,
             "height": 600,
-            "padding": { "left": 5, "right": 5, "top": 20, "bottom": 0 },
+            "padding": { "left": 5, "right": 5, "top": 5, "bottom": 0 },
             "autosize": "none",
             "signals": [
                 { "name": "cx", "update": "width / 2" },
@@ -100,7 +100,7 @@ export const BarChart = () => {
     const signalListeners = { clickEvent: handleSignals };
 
     return <div className="min-h-screen w-full flex p-4">
-        <div className='w-2/3 flex justify-center items-center'>
+        <div className='w-2/3 flex justify-center items-start'>
             <div>
                 {(spec) && <Vega
                     spec={spec}
@@ -108,7 +108,7 @@ export const BarChart = () => {
                     signalListeners={signalListeners} />}
             </div>
         </div>
-        <div className='w-1/3 justify-center items-center'>
+        <div className='w-1/3 justify-center items-start'>
             <AstroAddressDetails address={selectedAdress} />
         </div>
     </div>
