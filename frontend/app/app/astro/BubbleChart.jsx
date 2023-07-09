@@ -7,6 +7,8 @@ export const BarChart = () => {
     const [spec, setSpec] = useState()
     const [selectedAdress, setSelectedAdress] = useState()
 
+    const height = 615
+
     useEffect(() => {
         if (rangeUp === undefined) {
             return
@@ -14,12 +16,17 @@ export const BarChart = () => {
         setSpec({
             "$schema": "https://vega.github.io/schema/vega/v5.json",
             "width": 800,
-            "height": 625,
-            "padding": { "left": 5, "right": 5, "top": 5, "bottom": 0 },
-            "autosize": "none",
+            "height": height,
+            "padding": { "left": 5, "right": 5, "top": 0, "bottom": 0 },
+            "autosize": "pad",
+            "title": {
+                "orient": "top",
+                "text": "Top 50 ASTRO sellers after vesting period ended (1st of July)",
+                "color": "#E8E8E8"
+            },
             "signals": [
-                { "name": "cx", "update": "width / 2" },
-                { "name": "cy", "update": "height / 2" },
+                { "name": "cx", "update": "width / 2 - 50" },
+                { "name": "cy", "update": "height / 2 - 30" },
                 {
                     "name": "gravityX",
                     "value": 0.1,
@@ -90,6 +97,20 @@ export const BarChart = () => {
                     ]
                 },
             ],
+            "legends": {
+                type: "gradient",
+                title: "ASTRO Holdings",
+                fill: "color",
+                direction: "vertical",
+                orient: 'left',
+                gradientLength: height,
+                gradientThickness: 15,
+                titleOrient: "left",
+                titleAnchor: null,
+                titleColor: 'white',
+                symbolFillColor: 'white',
+                labelColor: 'white'
+            }
         })
     }, [rangeUp])
 
