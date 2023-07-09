@@ -42,9 +42,9 @@ export const BarChart = () => {
                 },
                 {
                     "name": "color",
-                    "type": "ordinal",
-                    "domain": { "data": "table", "field": "traderAddress" },
-                    "range": "ramp"
+                    "type": "sequential",
+                    "domain": { "data": "table", "field": "returnAmount" },
+                    "range": { "interpolate": "rgb", "scheme": "blues" }
                 }
             ],
             "marks": [
@@ -54,7 +54,7 @@ export const BarChart = () => {
                     "from": { "data": "table" },
                     "encode": {
                         "enter": {
-                            "fill": { "scale": "color", "field": "traderAddress" },
+                            "fill": { "scale": "color", "field": "returnAmount" },
                             "xfocus": { "signal": "cx" },
                             "yfocus": { "signal": "cy" }
                         },
