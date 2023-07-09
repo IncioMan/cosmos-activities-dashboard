@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Vega } from 'react-vega';
-import barchart from './barchart.json';
 
 export const BarChart = () => {
     const [rangeUp, setRangeUp] = useState(5000)
