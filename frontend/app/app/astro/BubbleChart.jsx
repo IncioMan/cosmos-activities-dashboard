@@ -43,7 +43,7 @@ export const BarChart = () => {
                     "name": "color",
                     "type": "sequential",
                     "domain": { "data": "table", "field": "Total_astro" },
-                    "range": { "interpolate": "rgb", "scheme": "yelloworangered" }
+                    "range": { "interpolate": "rgb", "scheme": "purplered" }
                 }
             ],
             "marks": [
