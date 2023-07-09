@@ -14,7 +14,7 @@ export const BarChart = () => {
         setSpec({
             "$schema": "https://vega.github.io/schema/vega/v5.json",
             "width": 800,
-            "height": 600,
+            "height": 625,
             "padding": { "left": 5, "right": 5, "top": 5, "bottom": 0 },
             "autosize": "none",
             "signals": [
@@ -99,7 +99,7 @@ export const BarChart = () => {
 
     const signalListeners = { clickEvent: handleSignals };
 
-    return <div className="min-h-screen w-full flex p-4">
+    return <div className="h-full w-full flex p-4 py-8">
         <div className='w-2/3 flex justify-center items-start'>
             <div>
                 {(spec) && <Vega
