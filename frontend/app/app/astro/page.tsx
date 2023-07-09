@@ -1,5 +1,6 @@
 "use client"
 import BubbleChart from "./BubbleChart";
+import TestChart from "./TestChart";
 
 export default async function Home() {
 
