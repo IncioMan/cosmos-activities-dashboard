@@ -103,10 +103,10 @@ export const BarChart = () => {
                         "enter": {
                             "align": { "value": "center" },
                             "baseline": { "value": "middle" },
-                            "fontSize": { "value": 15 },
+                            "fontSize": { "value": 10 },
                             "fontWeight": { "value": "bold" },
                             "fill": { "value": "white" },
-                            "text": { "field": "datum.returnAmount" }
+                            "text": { "field": "datum.returnAmount_label" }
                         },
                         "update": { "x": { "field": "x" }, "y": { "field": "y" } }
                     }
