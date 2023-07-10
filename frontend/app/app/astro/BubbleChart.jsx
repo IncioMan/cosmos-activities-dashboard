@@ -7,7 +7,7 @@ export const BarChart = () => {
     const [spec, setSpec] = useState()
     const [selectedAdress, setSelectedAdress] = useState()
 
-    const height = 615
+    const height = 580
 
     useEffect(() => {
         if (rangeUp === undefined) {
@@ -26,7 +26,7 @@ export const BarChart = () => {
             },
             "signals": [
                 { "name": "cx", "update": "width / 2 - 50" },
-                { "name": "cy", "update": "height / 2 + 30" },
+                { "name": "cy", "update": "height / 2 + 10" },
                 {
                     "name": "gravityX",
                     "value": 0.1,
@@ -94,8 +94,23 @@ export const BarChart = () => {
                                 { "force": "y", "y": "yfocus", "strength": { "signal": "gravityY" } }
                             ]
                         }
-                    ]
+                    ],
                 },
+                {
+                    "type": "text",
+                    "from": { "data": "nodes" },
+                    "encode": {
+                        "enter": {
+                            "align": { "value": "center" },
+                            "baseline": { "value": "middle" },
+                            "fontSize": { "value": 15 },
+                            "fontWeight": { "value": "bold" },
+                            "fill": { "value": "white" },
+                            "text": { "field": "datum.returnAmount" }
+                        },
+                        "update": { "x": { "field": "x" }, "y": { "field": "y" } }
+                    }
+                }
             ],
             "legends": {
                 type: "gradient",
@@ -115,13 +130,14 @@ export const BarChart = () => {
     }, [rangeUp])
 
     function handleSignals(...args) {
+        console.log(args)
         setSelectedAdress(args[1]['traderAddress']);
     }
 
     const signalListeners = { clickEvent: handleSignals };
 
     return <div className="h-full w-full flex p-4 py-8">
-        <div className='w-2/3 flex justify-center items-start'>
+        <div className='w-3/5 flex justify-center items-start'>
             <div>
                 {(spec) && <Vega
                     spec={spec}
@@ -129,7 +145,7 @@ export const BarChart = () => {
                     signalListeners={signalListeners} />}
             </div>
         </div>
-        <div className='w-1/3 justify-center items-start'>
+        <div className='w-2/5 flex justify-center items-center'>
             <AstroAddressDetails address={selectedAdress} />
         </div>
     </div>
