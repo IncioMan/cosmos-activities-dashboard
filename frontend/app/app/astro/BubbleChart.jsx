@@ -21,7 +21,7 @@ export const BarChart = () => {
             "autosize": "pad",
             "title": {
                 "orient": "top",
-                "text": "Top 50 ASTRO sellers after vesting period ended (1st of July)",
+                "text": "Top 100 ASTRO sellers after vesting period ended (1st of July)",
                 "color": "#E8E8E8"
             },
             "signals": [
