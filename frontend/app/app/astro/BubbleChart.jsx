@@ -26,7 +26,7 @@ export const BarChart = () => {
             },
             "signals": [
                 { "name": "cx", "update": "width / 2 - 50" },
-                { "name": "cy", "update": "height / 2 - 30" },
+                { "name": "cy", "update": "height / 2 + 30" },
                 {
                     "name": "gravityX",
                     "value": 0.1,
