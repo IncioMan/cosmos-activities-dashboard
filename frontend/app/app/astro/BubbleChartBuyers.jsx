@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Vega } from 'react-vega';
 import AstroAddressDetails from './AstroAdressDetails'
 
-export const BarChart = () => {
-    const [rangeUp, setRangeUp] = useState(5000)
+export const BarChartBuyers = () => {
+    const [rangeUp, setRangeUp] = useState(3000)
     const [spec, setSpec] = useState()
     const [selectedAdress, setSelectedAdress] = useState()
 
@@ -21,7 +21,7 @@ export const BarChart = () => {
             "autosize": "pad",
             "title": {
                 "orient": "top",
-                "text": "Top 100 ASTRO sellers after vesting period ended (1st of July)",
+                "text": "Top 100 ASTRO buyers after vesting period ended (1st of July)",
                 "color": "#E8E8E8"
             },
             "signals": [
@@ -45,7 +45,7 @@ export const BarChart = () => {
             "data": [
                 {
                     "name": "table",
-                    "url": "./top_sellers.json"
+                    "url": "./top_buyers.json"
                 }
             ],
             "scales": [
@@ -58,7 +58,7 @@ export const BarChart = () => {
                     "name": "color",
                     "type": "sequential",
                     "domain": { "data": "table", "field": "Total_astro" },
-                    "range": { "interpolate": "rgb", "scheme": "purplered" }
+                    "range": { "interpolate": "rgb", "scheme": "yellowgreen" }
                 }
             ],
             "marks": [
@@ -103,9 +103,9 @@ export const BarChart = () => {
                         "enter": {
                             "align": { "value": "center" },
                             "baseline": { "value": "middle" },
-                            "fontSize": { "value": 15 },
+                            "fontSize": { "value": 8 },
                             "fontWeight": { "value": "bold" },
-                            "fill": { "value": "white" },
+                            "fill": { "value": "black" },
                             "text": { "field": "datum.returnAmount_label" }
                         },
                         "update": { "x": { "field": "x" }, "y": { "field": "y" } }
@@ -144,11 +144,11 @@ export const BarChart = () => {
                     actions={false}
                     signalListeners={signalListeners} />}
             </div>
-        </div>
-        <div className='w-2/5 flex justify-center items-center'>
-            <AstroAddressDetails address={selectedAdress} />
+            <div className='w-2/5 flex justify-center items-center'>
+                <AstroAddressDetails address={selectedAdress} />
+            </div>
         </div>
     </div>
 }
 
-export default BarChart;
+export default BarChartBuyers;

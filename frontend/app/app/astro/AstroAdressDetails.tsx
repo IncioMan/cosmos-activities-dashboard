@@ -65,7 +65,7 @@ function AstroAdressDetails({ address }: Props) {
                         "update": {
                             "x": { "scale": "x", "field": "date" },
                             "y": { "scale": "y", "field": "returnAmount" },
-                            "size": { "value": 20 },
+                            "size": { "value": 40 },
                             "shape": { "value": "circle" },
                             "strokeWidth": { "value": 2 },
                             "stroke": { "value": "#d284bf" },
