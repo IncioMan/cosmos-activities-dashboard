@@ -2,6 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { Vega } from 'react-vega'
 import data from '../data/sellers_activity.json'
+import { Bubble } from 'react-chartjs-2'
+import { Chart as ChartJS } from 'chart.js/auto'
+import { CategoryScale } from 'chart.js';
+ChartJS.register(CategoryScale);
 
 interface Props {
     address: string | undefined
@@ -11,73 +15,39 @@ const allActivities: ITraderActivity[] = data;
 
 function AstroAdressDetails({ address }: Props) {
     const [traderActivity, setTraderActivity] = useState<ITraderActivity[]>()
-    const [spec, setSpec] = useState({})
+    const [data, setData] = useState<any>()
 
     useEffect(() => {
         setTraderActivity(allActivities.filter((a: ITraderActivity) => a.traderAddress == address))
     }, [address])
 
     useEffect(() => {
-        console.log(traderActivity)
-        const spec = {
-            "$schema": "https://vega.github.io/schema/vega/v5.json",
-            "description": "A basic line chart example.",
-            "width": 300,
-            "height": 150,
-            "padding": 5,
-
-            "data": [
-                {
-                    "name": "table",
-                    "values": traderActivity
-                }
-            ],
-
-            "scales": [
-                {
-                    "name": "x",
-                    "type": "point",
-                    "range": "width",
-                    "domain": { "data": "table", "field": "date" }
-                },
-                {
-                    "name": "y",
-                    "type": "linear",
-                    "range": "height",
-                    "nice": true,
-                    "zero": true,
-                    "domain": { "data": "table", "field": "returnAmount" }
-                }
-            ],
-
-            "axes": [
-                { "orient": "bottom", "scale": "x", "labelColor": "white" },
-                { "orient": "left", "scale": "y", "labelColor": "white" }
-            ],
-
-
-            "marks": [
-                {
-                    "name": "marks",
-                    "type": "symbol",
-                    "from": { "data": "table" },
-                    "encode": {
-                        "update": {
-                            "x": { "scale": "x", "field": "date" },
-                            "y": { "scale": "y", "field": "returnAmount" },
-                            "size": { "value": 40 },
-                            "shape": { "value": "circle" },
-                            "strokeWidth": { "value": 2 },
-                            "stroke": { "value": "#d284bf" },
-                            "fill": { "value": "#d284bf" }
-                        }
-                    }
-                }
-            ]
+        if (traderActivity === undefined) {
+            return
         }
-        setSpec(spec)
+        console.log('HEREEEE', traderActivity)
+        const data = {
+            datasets: [
+                {
+                    label: address,
+                    data: traderActivity?.map((t: ITraderActivity) => ({
+                        x: t.date,
+                        y: t.returnAmount,
+                        r: t.returnAmount,
+                    })),
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                }],
+        }
+        setData(data)
     }, [traderActivity])
 
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: true,
+            },
+        },
+    };
 
 
     return (
@@ -85,9 +55,7 @@ function AstroAdressDetails({ address }: Props) {
             <div className='text-white text-md pb-8'>
                 <a href={`https://chainsco.pe/terra2/address/${address}`} className='font-medium text-[#e23f94] dark:text-[#d284bf] hover:underline' target="blank">{address}</a>
             </div>
-            {(address && spec) && <Vega
-                spec={spec}
-                actions={false} />}
+            {(address && data) && <Bubble options={options} data={data} />}
         </div >
     )
 }

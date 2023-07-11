@@ -28,7 +28,7 @@ export default async function Home() {
         <Image src={imageFile} alt="Description of the image" width={200} />
       </div>
       <div className="h-full flex flex-1 items-start justify-center">
-        <BubbleChartBuyers />
+        <BubbleChart />
       </div>
       <div className="flex justify-center items-end space-x-4">
         <a href="https://github.com/IncioMan" target="_blank">

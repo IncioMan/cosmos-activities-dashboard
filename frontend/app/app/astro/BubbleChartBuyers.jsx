@@ -3,7 +3,7 @@ import { Vega } from 'react-vega';
 import AstroAddressDetails from './AstroAdressDetails'
 
 export const BarChartBuyers = () => {
-    const [rangeUp, setRangeUp] = useState(3000)
+    const [rangeUp, setRangeUp] = useState(2500)
     const [spec, setSpec] = useState()
     const [selectedAdress, setSelectedAdress] = useState()
 
@@ -103,12 +103,15 @@ export const BarChartBuyers = () => {
                         "enter": {
                             "align": { "value": "center" },
                             "baseline": { "value": "middle" },
-                            "fontSize": { "value": 8 },
+                            "fontSize": { "value": 10 },
                             "fontWeight": { "value": "bold" },
                             "fill": { "value": "black" },
                             "text": { "field": "datum.returnAmount_label" }
                         },
-                        "update": { "x": { "field": "x" }, "y": { "field": "y" } }
+                        "update": {
+                            "x": { "field": "x" },
+                            "y": { "field": "y" }
+                        }
                     }
                 }
             ],
