@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Vega } from 'react-vega';
 import AstroAddressDetails from './AstroAdressDetails'
 
-export const BarChartBuyers = () => {
-    const [rangeUp, setRangeUp] = useState(2500)
+interface props {
+    rangeUp: number,
+    width: number,
+    height: number,
+    dataUrl: string,
+    colorSchema: string,
+    title: string
+}
+
+export const BubbleChartTraders = ({ rangeUp, title, width, height, dataUrl, colorSchema }: props) => {
     const [spec, setSpec] = useState()
     const [selectedAdress, setSelectedAdress] = useState()
-
-    const height = 580
 
     useEffect(() => {
         if (rangeUp === undefined) {
@@ -15,13 +21,13 @@ export const BarChartBuyers = () => {
         }
         setSpec({
             "$schema": "https://vega.github.io/schema/vega/v5.json",
-            "width": 800,
+            "width": width,
             "height": height,
-            "padding": { "left": 5, "right": 5, "top": 0, "bottom": 0 },
+            "padding": { "left": 0, "right": 0, "top": 0, "bottom": 0 },
             "autosize": "pad",
             "title": {
                 "orient": "top",
-                "text": "Top 100 ASTRO buyers after vesting period ended (1st of July)",
+                "text": title,
                 "color": "#E8E8E8"
             },
             "signals": [
@@ -45,7 +51,7 @@ export const BarChartBuyers = () => {
             "data": [
                 {
                     "name": "table",
-                    "url": "./top_buyers.json"
+                    "url": dataUrl
                 }
             ],
             "scales": [
@@ -58,7 +64,7 @@ export const BarChartBuyers = () => {
                     "name": "color",
                     "type": "sequential",
                     "domain": { "data": "table", "field": "Total_astro" },
-                    "range": { "interpolate": "rgb", "scheme": "yellowgreen" }
+                    "range": { "interpolate": "rgb", "scheme": colorSchema }
                 }
             ],
             "marks": [
@@ -132,7 +138,7 @@ export const BarChartBuyers = () => {
         })
     }, [rangeUp])
 
-    function handleSignals(...args) {
+    function handleSignals(args: any) {
         console.log(args)
         setSelectedAdress(args[1]['traderAddress']);
     }
@@ -140,18 +146,18 @@ export const BarChartBuyers = () => {
     const signalListeners = { clickEvent: handleSignals };
 
     return <div className="h-full w-full flex p-4 py-8">
-        <div className='w-3/5 flex justify-center items-start'>
+        <div className='w-4/7 flex justify-center items-start'>
             <div>
                 {(spec) && <Vega
                     spec={spec}
                     actions={false}
                     signalListeners={signalListeners} />}
             </div>
-            <div className='w-2/5 flex justify-center items-center'>
-                <AstroAddressDetails address={selectedAdress} />
-            </div>
+        </div>
+        <div className='w-2/7 flex justify-center items-center'>
+            <AstroAddressDetails address={selectedAdress} />
         </div>
     </div>
 }
 
-export default BarChartBuyers;
+export default BubbleChartTraders;

@@ -1,25 +1,12 @@
 "use client"
-import BubbleChartBuyers from "./BubbleChartBuyers";
-import BubbleChart from "./BubbleChart";
-import TestChart from "./TestChart";
+import BubbleChartTraders from "./BubbleChartTraders";
 import imageFile from './Astroport White Logo_900x360px.png';
 import Image from 'next/image';
 import { FaGithub, FaTwitter } from 'react-icons/fa';
-import { TabMenu } from 'primereact/tabmenu';
-import { MenuItem } from 'primereact/menuitem';
-//theme
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-//core
-import "primereact/resources/primereact.min.css";
 
 
 
 export default async function Home() {
-
-  const items: MenuItem[] = [
-    { label: 'Home', icon: 'pi pi-fw pi-home' },
-    { label: 'Calendar', icon: 'pi pi-fw pi-calendar' }
-  ];
 
   return <>
     <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
@@ -28,7 +15,12 @@ export default async function Home() {
         <Image src={imageFile} alt="Description of the image" width={200} />
       </div>
       <div className="h-full flex flex-1 items-start justify-center">
-        <BubbleChart />
+        <BubbleChartTraders width={800} height={580} colorSchema="purplered"
+          title="Top 100 ASTRO sellers after vesting period ended (1st of July)"
+          rangeUp={5000} dataUrl="./top_sellers.json" />
+        {/*<BubbleChartTraders width={800} height={580} colorSchema="yellowgreen"
+          title="Top 100 ASTRO buyers after vesting period ended (1st of July)"
+          rangeUp={2500} dataUrl="./top_buyers.json" />*/}
       </div>
       <div className="flex justify-center items-end space-x-4">
         <a href="https://github.com/IncioMan" target="_blank">
