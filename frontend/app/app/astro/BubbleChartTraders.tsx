@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Vega } from 'react-vega';
-import AstroAddressDetails from './AstroAdressDetails'
 
 interface props {
     rangeUp: number,
     width: number,
     height: number,
-    dataUrl: string,
+    data: any,
     colorSchema: string,
-    title: string
+    title: string,
+    setAddress: (address: string) => void
 }
 
-export const BubbleChartTraders = ({ rangeUp, title, width, height, dataUrl, colorSchema }: props) => {
+export const BubbleChartTraders = ({ rangeUp, title, width, height, data, colorSchema, setAddress }: props) => {
     const [spec, setSpec] = useState()
-    const [selectedAdress, setSelectedAdress] = useState()
 
     useEffect(() => {
         if (rangeUp === undefined) {
@@ -51,7 +50,7 @@ export const BubbleChartTraders = ({ rangeUp, title, width, height, dataUrl, col
             "data": [
                 {
                     "name": "table",
-                    "url": dataUrl
+                    "values": data
                 }
             ],
             "scales": [
@@ -138,9 +137,9 @@ export const BubbleChartTraders = ({ rangeUp, title, width, height, dataUrl, col
         })
     }, [rangeUp])
 
-    function handleSignals(args: any) {
+    function handleSignals(...args: any) {
         console.log(args)
-        setSelectedAdress(args[1]['traderAddress']);
+        setAddress(args[1]['traderAddress']);
     }
 
     const signalListeners = { clickEvent: handleSignals };
@@ -153,9 +152,6 @@ export const BubbleChartTraders = ({ rangeUp, title, width, height, dataUrl, col
                     actions={false}
                     signalListeners={signalListeners} />}
             </div>
-        </div>
-        <div className='w-2/7 flex justify-center items-center'>
-            <AstroAddressDetails address={selectedAdress} />
         </div>
     </div>
 }

@@ -5,49 +5,50 @@ import data from '../data/sellers_activity.json'
 import { Bubble } from 'react-chartjs-2'
 import { Chart as ChartJS } from 'chart.js/auto'
 import { CategoryScale } from 'chart.js';
+import { Doughnut } from "react-chartjs-2";
+import { Chart, ArcElement } from "chart.js";
+
+Chart.register(ArcElement);
 ChartJS.register(CategoryScale);
 
 interface Props {
-    address: string | undefined
+    address: string | undefined,
+    tradersInfo: any
 }
 
 const allActivities: ITraderActivity[] = data;
 
-function AstroAdressDetails({ address }: Props) {
-    const [traderActivity, setTraderActivity] = useState<ITraderActivity[]>()
-    const [data, setData] = useState<any>()
+function AstroAdressDetails({ address, tradersInfo }: Props) {
+    const [traderInfo, setTraderInfo] = useState<ITraderSummary>()
+    const [chartData, setChartData] = useState<any>()
 
     useEffect(() => {
-        setTraderActivity(allActivities.filter((a: ITraderActivity) => a.traderAddress == address))
+        //setTraderActivity(allActivities.filter((a: ITraderActivity) => a.traderAddress == address))
+        setTraderInfo(tradersInfo.filter((a: ITraderSummary) => a.traderAddress == address)[0])
     }, [address])
 
     useEffect(() => {
-        if (traderActivity === undefined) {
-            return
-        }
-        console.log('HEREEEE', traderActivity)
-        const data = {
+        const _data = {
+            labels: [
+                'ASTRO',
+                'xASTRO'
+            ],
             datasets: [
                 {
-                    label: address,
-                    data: traderActivity?.map((t: ITraderActivity) => ({
-                        x: t.date,
-                        y: t.returnAmount,
-                        r: t.returnAmount,
-                    })),
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                }],
+                    data: [
+                        traderInfo?.ASTRO,
+                        traderInfo?.xASTRO
+                    ],
+                    backgroundColor: [
+                        "#336699",
+                        "#99CCFF"
+                    ],
+                    display: true
+                }
+            ]
         }
-        setData(data)
-    }, [traderActivity])
-
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: true,
-            },
-        },
-    };
+        setChartData(_data)
+    }, [traderInfo])
 
 
     return (
@@ -55,7 +56,28 @@ function AstroAdressDetails({ address }: Props) {
             <div className='text-white text-md pb-8'>
                 <a href={`https://chainsco.pe/terra2/address/${address}`} className='font-medium text-[#e23f94] dark:text-[#d284bf] hover:underline' target="blank">{address}</a>
             </div>
-            {(address && data) && <Bubble options={options} data={data} />}
+            <div>
+                {chartData && <Doughnut
+                    data={chartData}
+                    options={{
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: "top"
+                            },
+                            tooltip: {
+                                enabled: true
+                            }
+                        },
+                        borderWidth: 1,
+                        rotation: -90,
+                        circumference: 180,
+                        cutout: "60%",
+                        maintainAspectRatio: true,
+                        responsive: true
+                    }}
+                />}
+            </div>
         </div >
     )
 }
