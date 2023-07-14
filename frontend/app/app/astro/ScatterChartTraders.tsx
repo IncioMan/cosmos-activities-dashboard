@@ -37,7 +37,11 @@ export function ScatterChartTraders() {
                     y: s.total_return_amount,
                     r: 10,
                 })),
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                backgroundColor: top_sellers.map((entry: ITraderSummary) => {
+                    const maxAmount = Math.max(...top_sellers.map((d) => d.Total_astro));
+                    const scale = Math.ceil((entry.Total_astro ? entry.Total_astro / maxAmount : 0) * 255); // Scale the value to the 0-255 range
+                    return `rgba(${scale}, 0, 0, 0.5)`; // Use red scale for background color
+                }),
             },
         ],
     };
