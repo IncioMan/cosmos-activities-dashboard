@@ -111,7 +111,7 @@ export const BubbleChartTraders = ({ rangeUp, title, width, height, data, colorS
                             "fontSize": { "value": 10 },
                             "fontWeight": { "value": "bold" },
                             "fill": { "value": "black" },
-                            "text": { "field": "datum.returnAmount_label" }
+                            "text": { "field": "datum.total_return_amount_label" }
                         },
                         "update": {
                             "x": { "field": "x" },
@@ -145,7 +145,7 @@ export const BubbleChartTraders = ({ rangeUp, title, width, height, data, colorS
     const signalListeners = { clickEvent: handleSignals };
 
     return <div className="h-full w-full flex p-4 py-8">
-        <div className='w-4/7 flex justify-center items-start'>
+        <div className='flex justify-center items-start'>
             <div>
                 {(spec) && <Vega
                     spec={spec}

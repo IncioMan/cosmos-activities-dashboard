@@ -13,8 +13,7 @@ interface ITraderSummary {
     ROAR: number | undefined,
     boneLuna: number | undefined,
     traderAddress: string,
-    last_trade_date: string | undefined,
-    total_return_amount: number | undefined,
-    Total_astro: number | undefined,
-    total_return_amount_label: string | undefined
+    dollar_amount: number | undefined,
+    total_astro_holdings: number | undefined,
+    total_return_dollar_amount_label: string | undefined
 }

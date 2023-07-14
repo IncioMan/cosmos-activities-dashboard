@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
-import Image from 'next/image'
+//core
+import "primereact/resources/primereact.min.css";
 
 export default function Home() {
   redirect("cosmos")
