@@ -8,6 +8,7 @@ requests = "*"
 pandas = "*"
 jupyterlab = "*"
 matplotlib = "*"
+boto3 = "*"
 
 [dev-packages]
 
