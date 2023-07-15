@@ -15,12 +15,12 @@ import { ITraderSummary, TimeFrame, TraderType } from "@/interfaces/Interfaces";
 import AstroBubbleChartTraders from "../components/AstroBubbleChartTraders";
 
 type Props = {
-    top_today_sellers: ITraderSummary[]
-    top_today_buyers: ITraderSummary[]
-    top_weekly_sellers: ITraderSummary[]
-    top_weekly_buyers: ITraderSummary[]
-    top_monthly_sellers: ITraderSummary[]
-    top_monthly_buyers: ITraderSummary[]
+    top_today_sellers: ITraderSummary[] | undefined
+    top_today_buyers: ITraderSummary[] | undefined
+    top_weekly_sellers: ITraderSummary[] | undefined
+    top_weekly_buyers: ITraderSummary[] | undefined
+    top_monthly_sellers: ITraderSummary[] | undefined
+    top_monthly_buyers: ITraderSummary[] | undefined
 }
 
 export default function Home({
