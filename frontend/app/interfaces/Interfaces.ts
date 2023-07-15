@@ -31,3 +31,8 @@ export enum TimeFrame {
     LastWeek,
     LastMonth
 }
+
+export enum TraderType {
+    Buyers,
+    Sellers
+}

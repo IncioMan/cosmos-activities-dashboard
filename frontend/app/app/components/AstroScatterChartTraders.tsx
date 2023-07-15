@@ -51,8 +51,8 @@ export function AstroScatterChartTraders({ excludeNoHolder, timeFrame }: Props) 
         }
         if (excludeNoHolder) {
             console.log('Excluding no holders from data')
-            setTopSellers(top_sellers.filter((s: ITraderSummary) => s.total_astro_holdings && s.total_astro_holdings > 0))
-            setTopBuyers(top_buyers.filter((s: ITraderSummary) => s.total_astro_holdings && s.total_astro_holdings > 0))
+            setTopSellers(top_sellers.filter((s: ITraderSummary) => s.total_astro_holdings && s.total_astro_holdings > 10))
+            setTopBuyers(top_buyers.filter((s: ITraderSummary) => s.total_astro_holdings && s.total_astro_holdings > 10))
         }
         else {
             console.log('Including no holders in data')
