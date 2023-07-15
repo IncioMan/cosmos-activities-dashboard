@@ -22,7 +22,7 @@ interface props {
 
 export const AstroBubbleChartTraders = ({ rangeUp, title, width, height, timeFrame, excludeNoHolder, traderType, colorSchema, setAddress }: props) => {
     const [traderData, setTraderData] = useState<ITraderSummary[]>([])
-    const [spec, setSpec] = useState()
+    const [spec, setSpec] = useState<any>()
 
     useEffect(() => {
         var top_sellers: ITraderSummary[] = []
