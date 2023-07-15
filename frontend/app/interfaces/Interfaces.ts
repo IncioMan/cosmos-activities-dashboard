@@ -25,3 +25,9 @@ export interface Undelegation {
     DATE_STR: string
     ADDRESS_SHORT?: string
 }
+
+export enum TimeFrame {
+    Today,
+    LastWeek,
+    LastMonth
+}
