@@ -1,18 +1,20 @@
 "use client"
-//theme
+
 import "primereact/resources/themes/md-light-indigo/theme.css";
-//core
 import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 import React, { useEffect, useState } from "react";
 import { FaGithub, FaTwitter } from 'react-icons/fa';
 import { Checkbox } from "primereact/checkbox";
-import { RadioButton } from "primereact/radiobutton";//core
+import { RadioButton } from "primereact/radiobutton";
+import { Button } from "primereact/button";
 import imageFile from '../../public/astro.png';
 import Image from 'next/image';
 import { AstroScatterChartTraders } from "../components/AstroScatterChartTraders";
 import { TimeFrame } from "@/interfaces/Interfaces";
-import { time } from "console";
+import { Tooltip } from 'primereact/tooltip';
+
 
 export default function Home() {
   const [excludeNoAstroHoldingsAddress, setExcludeNoAstroHoldingsAddress] = useState<boolean>(true)
@@ -28,6 +30,7 @@ export default function Home() {
       {/* HEADER*/}
       <div className="flex flex-row">
         <Image src={imageFile} alt="Description of the image" width={200} />
+        <Tooltip target=".info-icon" />
         <div className="flex-1 text-white text-sm flex justify-around items-center p-4">
           <div className="flex align-items-center">
             <Checkbox
@@ -50,6 +53,17 @@ export default function Home() {
               <label htmlFor="last_month" className="ml-2">Last Month</label>
             </div>
           </div>
+          <Button
+            style={{ color: 'white' }}
+            icon="pi pi-info-circle"
+            rounded text
+            tooltip="This graph shows the top 50 traders for the $ASTRO token in the selected timeframe along with their $ASTRO holdings"
+            tooltipOptions={{
+              position: 'bottom',
+              mouseTrack: false,
+              mouseTrackTop: 15
+            }}
+          />
         </div>
       </div>
       {/* BODY */}

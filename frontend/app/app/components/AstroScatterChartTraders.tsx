@@ -64,6 +64,9 @@ export function AstroScatterChartTraders({ excludeNoHolder, timeFrame }: Props) 
 
     const options = {
         responsive: true,
+        onHover: (event: any, chartElement: any) => {
+            event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+        },
         onClick: function (event: any, chartElements: any) {
             if (chartElements) {
                 try {
@@ -101,11 +104,6 @@ export function AstroScatterChartTraders({ excludeNoHolder, timeFrame }: Props) 
             }
         },
         plugins: {
-            title: {
-                display: true,
-                text: 'Undelegating ATOM',
-                position: 'top' as const
-            },
             tooltip: {
                 callbacks: {
                     label: function (context: any) {
