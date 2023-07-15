@@ -31,7 +31,7 @@ export default function Home() {
         <div className="flex-1 text-white text-sm flex justify-around items-center p-4">
           <div className="flex align-items-center">
             <Checkbox
-              onChange={e => { setExcludeNoAstroHoldingsAddress(e.checked) }}
+              onChange={e => { setExcludeNoAstroHoldingsAddress(e.checked === undefined ? false : e.checked) }}
               checked={excludeNoAstroHoldingsAddress}>
             </Checkbox>
             <label htmlFor="ingredient1" className="ml-2">Exclude traders with no ASTRO holdings (possible arbitrage bots)</label>
