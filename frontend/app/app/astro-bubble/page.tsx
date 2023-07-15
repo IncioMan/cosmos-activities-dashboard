@@ -44,12 +44,12 @@ export default async function Home() {
     <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
       className="h-screen">
       <ClientSideAstroBubblePage
-        top_today_sellers={top_today_sellers}
-        top_today_buyers={top_today_buyers}
-        top_weekly_sellers={top_weekly_sellers}
-        top_weekly_buyers={top_weekly_buyers}
-        top_monthly_sellers={top_monthly_sellers}
-        top_monthly_buyers={top_monthly_buyers}
+        top_today_sellers={top_today_sellers ? top_today_sellers : []}
+        top_today_buyers={top_today_buyers ? top_today_buyers : []}
+        top_weekly_sellers={top_weekly_sellers ? top_weekly_sellers : []}
+        top_weekly_buyers={top_weekly_buyers ? top_weekly_buyers : []}
+        top_monthly_sellers={top_monthly_sellers ? top_monthly_sellers : []}
+        top_monthly_buyers={top_monthly_buyers ? top_monthly_buyers : []}
       />
     </div>
   )
