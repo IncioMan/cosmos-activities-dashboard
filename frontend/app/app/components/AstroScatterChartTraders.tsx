@@ -8,23 +8,29 @@ import {
     TimeScale
 } from 'chart.js';
 import { Bubble } from 'react-chartjs-2';
-import top_today_sellers from '../../data/top_today_sellers.json'
-import top_today_buyers from '../../data/top_today_buyers.json'
-import top_weekly_sellers from '../../data/top_weekly_sellers.json'
-import top_weekly_buyers from '../../data/top_weekly_buyers.json'
-import top_monthly_sellers from '../../data/top_monthly_sellers.json'
-import top_monthly_buyers from '../../data/top_monthly_buyers.json'
 import { ITraderSummary, TimeFrame } from '../../interfaces/Interfaces'
-import { time } from 'console';
 ChartJS.register(LinearScale, PointElement, TimeScale, Tooltip, Legend);
 ChartJS.defaults.color = '#fff';
 
 type Props = {
     excludeNoHolder: boolean,
-    timeFrame: TimeFrame
+    timeFrame: TimeFrame,
+    top_today_sellers: ITraderSummary[]
+    top_today_buyers: ITraderSummary[]
+    top_weekly_sellers: ITraderSummary[]
+    top_weekly_buyers: ITraderSummary[]
+    top_monthly_sellers: ITraderSummary[]
+    top_monthly_buyers: ITraderSummary[]
 }
 
-export function AstroScatterChartTraders({ excludeNoHolder, timeFrame }: Props) {
+export function AstroScatterChartTraders({
+    excludeNoHolder, timeFrame,
+    top_today_sellers,
+    top_today_buyers,
+    top_weekly_sellers,
+    top_weekly_buyers,
+    top_monthly_sellers,
+    top_monthly_buyers }: Props) {
     const [topSellers, setTopSellers] = useState<ITraderSummary[]>([])
     const [topBuyers, setTopBuyers] = useState<ITraderSummary[]>([])
 

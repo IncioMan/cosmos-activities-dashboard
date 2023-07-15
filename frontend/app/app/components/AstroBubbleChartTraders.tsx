@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Vega } from 'react-vega';
-import top_today_sellers from '../../data/top_today_sellers.json'
-import top_today_buyers from '../../data/top_today_buyers.json'
-import top_weekly_sellers from '../../data/top_weekly_sellers.json'
-import top_weekly_buyers from '../../data/top_weekly_buyers.json'
-import top_monthly_sellers from '../../data/top_monthly_sellers.json'
-import top_monthly_buyers from '../../data/top_monthly_buyers.json'
 import { ITraderSummary, TimeFrame, TraderType } from '@/interfaces/Interfaces';
 
 interface props {
@@ -17,10 +11,27 @@ interface props {
     colorSchema: string,
     title: string,
     traderType: TraderType
-    setAddress: (address: string) => void
+    setAddress: (address: string) => void,
+    //DATA
+    top_today_sellers: ITraderSummary[]
+    top_today_buyers: ITraderSummary[]
+    top_weekly_sellers: ITraderSummary[]
+    top_weekly_buyers: ITraderSummary[]
+    top_monthly_sellers: ITraderSummary[]
+    top_monthly_buyers: ITraderSummary[]
 }
 
-export const AstroBubbleChartTraders = ({ rangeUp, title, width, height, timeFrame, excludeNoHolder, traderType, colorSchema, setAddress }: props) => {
+export const AstroBubbleChartTraders = ({
+    rangeUp, title, width, height, timeFrame,
+    excludeNoHolder, traderType, colorSchema,
+    setAddress,
+    //DATA
+    top_today_sellers,
+    top_today_buyers,
+    top_weekly_sellers,
+    top_weekly_buyers,
+    top_monthly_sellers,
+    top_monthly_buyers }: props) => {
     const [traderData, setTraderData] = useState<ITraderSummary[]>([])
     const [spec, setSpec] = useState<any>()
 
