@@ -1,65 +1,62 @@
 "use client"
-import BubbleChartTraders from "./BubbleChartTraders";
-import AstroAddressDetails from './AstroAdressDetails'
-import imageFile from './Astroport White Logo_900x360px.png';
-import Image from 'next/image';
+//theme
+import "primereact/resources/themes/md-light-indigo/theme.css";
+//core
+import "primereact/resources/primereact.min.css";
+
+import React, { useState } from "react";
 import { FaGithub, FaTwitter } from 'react-icons/fa';
-import { useState } from "react";
-import top_monthly_sellers from '../data/top_monthly_sellers.json'
-import top_weekly_sellers from '../data/top_weekly_sellers.json'
-import top_today_sellers from '../data/top_today_sellers.json'
-import top_monthly_buyers from '../data/top_monthly_buyers.json'
-import top_weekly_buyers from '../data/top_weekly_buyers.json'
-import top_today_buyers from '../data/top_today_buyers.json'
-import { ScatterChartTraders } from "./ScatterChartTraders";
-import { RadioButton } from "primereact/radiobutton";
+import { Checkbox } from "primereact/checkbox";
+import { RadioButton } from "primereact/radiobutton";//core
+import imageFile from '../../public/astro.png';
+import Image from 'next/image';
+import { AstroScatterChartTraders } from "../components/AstroScatterChartTraders";
 
-
-
-export default async function Home() {
-
+export default function Home() {
+  const [excludeNoAstroHoldingsAddress, setExcludeNoAstroHoldingsAddress] = useState<boolean>(true)
   const [ingredient, setIngredient] = useState('');
 
-  const selectAddress = (address: string) => {
-    console.log(address)
-    const newTab = window.open(`https://chainsco.pe/terra2/address/${address}`, '_blank');
-    newTab?.focus();
-  }
-
-  return <>
+  return (
     <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
       className="h-screen">
-      <div className="flex">
+      {/* HEADER*/}
+      <div className="flex flex-row">
         <Image src={imageFile} alt="Description of the image" width={200} />
-      </div>
-      <div className="h-[82%] flex flex-1 items-start justify-center">
-        <div className="w-[1000px] h-[90%] flex justify-center items-center">
-          <ScatterChartTraders />
+        <div className="flex-1 text-white flex justify-around items-center p-4">
+          <div className="flex align-items-center">
+            <Checkbox
+              onChange={e => { setExcludeNoAstroHoldingsAddress(e.checked) }}
+              checked={excludeNoAstroHoldingsAddress}>
+            </Checkbox>
+            <label htmlFor="ingredient1" className="ml-2">Cheese</label>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <div className="flex align-items-center">
+              <RadioButton inputId="ingredient1" name="pizza" value="Cheese" onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Cheese'} />
+              <label htmlFor="ingredient1" className="ml-2">Cheese</label>
+            </div>
+            <div className="flex align-items-center">
+              <RadioButton inputId="ingredient2" name="pizza" value="Mushroom" onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Mushroom'} />
+              <label htmlFor="ingredient2" className="ml-2">Mushroom</label>
+            </div>
+            <div className="flex align-items-center">
+              <RadioButton inputId="ingredient3" name="pizza" value="Pepper" onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Pepper'} />
+              <label htmlFor="ingredient3" className="ml-2">Pepper</label>
+            </div>
+            <div className="flex align-items-center">
+              <RadioButton inputId="ingredient4" name="pizza" value="Onion" onChange={(e) => setIngredient(e.value)} checked={ingredient === 'Onion'} />
+              <label htmlFor="ingredient4" className="ml-2">Onion</label>
+            </div>
+          </div>
         </div>
-        {/*
-        <BubbleChartTraders
-          width={800}
-          height={580}
-          colorSchema="purplered"
-          title="Top 20 ASTRO sellers today"
-          rangeUp={5000}
-          data={top_today_sellers}
-          setAddress={selectAddress} />
-          <BubbleChartTraders 
-            width={800} height={580} 
-            colorSchema="yellowgreen"
-            title="Top 100 ASTRO buyers after vesting period ended (1st of July)"
-            rangeUp={2500} 
-            data={top_buyers} />
-            <div className='w-full flex justify-center items-center'>
-          <AstroAddressDetails
-            tradersInfo={top_sellers}
-            address={address}
-          />
-        </div>*/
-        }
-
       </div>
+      {/* BODY */}
+      <div className="h-[82%] flex flex-1 items-center justify-center">
+        <div className="w-[1000px] h-[80%] flex justify-center items-center">
+          <AstroScatterChartTraders />
+        </div>
+      </div>
+      {/* FOOTER */}
       <div className="flex justify-center items-end space-x-4">
         <a href="https://github.com/IncioMan" target="_blank">
           <FaGithub style={{ fontSize: '25px' }} color="#ffffff" />
@@ -69,5 +66,5 @@ export default async function Home() {
         </a>
       </div>
     </div>
-  </>
+  )
 }

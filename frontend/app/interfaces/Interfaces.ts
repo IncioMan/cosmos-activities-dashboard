@@ -1,10 +1,10 @@
-interface ITraderActivity {
+export interface ITraderActivity {
     date: string,
     traderAddress: string,
     returnAmount: number
 }
 
-interface ITraderSummary {
+export interface ITraderSummary {
     xASTRO: number | undefined,
     SAYVE: number | undefined,
     ORNE: number | undefined,
@@ -16,4 +16,12 @@ interface ITraderSummary {
     dollar_amount: number | undefined,
     total_astro_holdings: number | undefined,
     total_return_dollar_amount_label: string | undefined
+}
+
+export interface Undelegation {
+    AMOUNT: number,
+    TX_FROM: string,
+    COMPLETION_TIME: Date
+    DATE_STR: string
+    ADDRESS_SHORT?: string
 }

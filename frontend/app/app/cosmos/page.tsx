@@ -1,7 +1,7 @@
 import { json } from "stream/consumers";
-import { Undelegation } from "../models/Undelegation";
-import BarChart from "../components/BarChart";
-import DateFocus from "../components/DateFocus";
+import { Undelegation } from "../../interfaces/Interfaces";
+import CosmosBarChart from "../components/CosmosBarChart";
+import CosmosDateFocus from "../components/CosmosDateFocus";
 import { FaGithub, FaTwitter } from 'react-icons/fa';
 
 
@@ -52,19 +52,22 @@ function groupData(jsonData: Undelegation[]) {
 export default async function Home() {
   const data: Undelegation[] | undefined = await loadData();
   const currentTime = new Date();
+  // 30 days back in time
+  currentTime.setDate(currentTime.getDate() - 30);
+  //
   const sortedData = data?.filter((u1: Undelegation) => {
     return u1.COMPLETION_TIME >= currentTime
   }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);
   const groupedData = sortedData ? groupData(sortedData) : []
 
   return <>
-    <div className="min-h-screen flex flex-col p-4">
-      <div className="h-full flex flex-1 items-center justify-center space-x-4 md:px-24">
+    <div className="min-h-screen flex flex-col px-4 py-8">
+      <div className="h-full flex flex-1 items-center justify-center space-x-4 md:px-12">
         <div className="w-2/3 h-full" style={{ height: "500px" }}>
-          <BarChart chartData={groupedData} />
+          <CosmosBarChart chartData={groupedData} />
         </div>
         <div className="w-1/3">
-          <DateFocus sortedData={sortedData} />
+          <CosmosDateFocus sortedData={sortedData} />
         </div>
       </div>
       <div className="flex justify-center space-x-4">

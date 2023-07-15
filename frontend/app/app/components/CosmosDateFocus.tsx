@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { Undelegation } from '../models/Undelegation'
+import { Undelegation } from '../../interfaces/Interfaces'
 import {
     Table,
     TableBody,
@@ -32,7 +32,7 @@ interface Props {
     sortedData: Undelegation[] | undefined
 }
 
-function DateFocus({ sortedData }: Props) {
+export default function CosmosDateFocus({ sortedData }: Props) {
 
     const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0])
     const [filteredData, setFilteredData] = useState<Undelegation[] | undefined>([])
@@ -75,7 +75,7 @@ function DateFocus({ sortedData }: Props) {
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select a date" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="h-[400px]">
                         {Array.from(new Set(sortedData?.map(a => a.DATE_STR))).sort((a, b) => a.localeCompare(b)).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                     </SelectContent>
                 </Select>
@@ -97,7 +97,7 @@ function DateFocus({ sortedData }: Props) {
                 <TableBody>
                     {
                         filteredData?.map((a: Undelegation) => {
-                            return <TableRow key={a.DATE_STR}>
+                            return <TableRow key={""}>
                                 <TableCell>{a.DATE_STR}</TableCell>
                                 <TableCell><a href={`https://www.mintscan.io/cosmos/account/${a.TX_FROM}`} className='font-medium text-blue-600 dark:text-blue-500 hover:underline' target="blank">{a.ADDRESS_SHORT}</a></TableCell>
                                 <TableCell className="text-right">{a.AMOUNT}</TableCell>
@@ -109,5 +109,3 @@ function DateFocus({ sortedData }: Props) {
         </div >
     )
 }
-
-export default DateFocus

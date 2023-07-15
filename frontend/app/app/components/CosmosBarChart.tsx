@@ -9,7 +9,7 @@ interface Props {
     chartData: { day: string, amount: number }[],
 }
 
-function BarChart({ chartData }: Props) {
+export default function CosmosBarChart({ chartData }: Props) {
     const chartRef = useRef();
 
     const data = {
@@ -53,5 +53,3 @@ function BarChart({ chartData }: Props) {
             }} />
     )
 }
-
-export default BarChart
