@@ -21,6 +21,7 @@ type Props = {
     top_weekly_buyers: ITraderSummary[]
     top_monthly_sellers: ITraderSummary[]
     top_monthly_buyers: ITraderSummary[]
+    lastUpdateDate: string
 }
 
 export default function Home({
@@ -30,6 +31,7 @@ export default function Home({
     top_weekly_buyers,
     top_monthly_sellers,
     top_monthly_buyers,
+    lastUpdateDate
 }: Props) {
     const [excludeNoAstroHoldingsAddress, setExcludeNoAstroHoldingsAddress] = useState<boolean>(true)
     const [timeframe, setTimeframe] = useState<TimeFrame>(TimeFrame.Today);
@@ -75,6 +77,17 @@ export default function Home({
                             <label htmlFor="last_month" className="ml-2">Last Month</label>
                         </div>
                     </div>
+                    <Button
+                        style={{ color: 'white' }}
+                        icon="pi pi-info-circle"
+                        rounded text
+                        tooltip={`This graph shows the top 50 traders for the $ASTRO token in the selected timeframe along with their $ASTRO holdings. The data has been last updated on the ${lastUpdateDate}`}
+                        tooltipOptions={{
+                            position: 'bottom',
+                            mouseTrack: false,
+                            mouseTrackTop: 15
+                        }}
+                    />
                 </div>
             </div>
             {/* BODY */}

@@ -15,19 +15,37 @@ const client = new S3Client({
   }
 })
 
-async function loadData(filename: string) {
-  const command = new GetObjectCommand({
-    Bucket: 'incioman-data-analysis',
-    Key: `astro_trading/20230715/${filename}`,
-  });
+const getDateFormatted = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
 
-  try {
-    const response = await client.send(command);
-    // The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
-    const str = await response?.Body?.transformToString();
-    if (str) return JSON.parse(str)
-  } catch (err) {
-    console.error(err);
+  const dateString = `${year}${month}${day}`;
+  return dateString
+}
+
+async function loadData(filename: string, returnDate = false) {
+  for (let i = 0; i < 30; i++) {
+    const currentDate = new Date();
+
+    currentDate.setDate(currentDate.getDate() - i);
+    const dateString = getDateFormatted(currentDate)
+
+    console.log(`Trying s3 folder astro_trading/${dateString}...`)
+    const command = new GetObjectCommand({
+      Bucket: 'incioman-data-analysis',
+      Key: `astro_trading/${dateString}/${filename}`,
+    });
+
+    try {
+      const response = await client.send(command);
+      // The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
+      const str = await response?.Body?.transformToString();
+      if (str && !returnDate) return JSON.parse(str)
+      else return dateString
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 
@@ -40,6 +58,12 @@ export default async function Home() {
   const top_weekly_sellers: ITraderSummary[] | undefined = await loadData("top_weekly_sellers.json");
   const top_monthly_sellers: ITraderSummary[] | undefined = await loadData("top_monthly_sellers.json");
 
+  const lastUpdateDate = await loadData("top_today_buyers.json", true);
+  const year = lastUpdateDate.substring(0, 4);
+  const month = lastUpdateDate.substring(4, 6);
+  const day = lastUpdateDate.substring(6, 8);
+  const formatteLastUpdateDate = `${year}-${month}-${day}`;
+
   return (
     <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
       className="h-screen">
@@ -50,6 +74,7 @@ export default async function Home() {
         top_weekly_buyers={top_weekly_buyers ? top_weekly_buyers : []}
         top_monthly_sellers={top_monthly_sellers ? top_monthly_sellers : []}
         top_monthly_buyers={top_monthly_buyers ? top_monthly_buyers : []}
+        lastUpdateDate={formatteLastUpdateDate}
       />
     </div>
   )
