@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="flex h-screen flex-col items-center justify-center p-24">
 
-      <div className="mb-32 flex justify-center lg:mb-0  lg:text-left">
+      <div className="mb-32 flex flex-wrap justify-center lg:mb-0  lg:text-left">
         <a
           href="/astro-chart"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -26,10 +26,9 @@ export default function Home() {
             </h2>
           </div>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Inspect daily, weekly and monthly trading activities for the $ASTRO token
+            Inspect trading activities with a traditional plot
           </p>
         </a>
-
         <a
           href="/astro-bubble"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -51,7 +50,7 @@ export default function Home() {
             </h2>
           </div>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Keep an eye on the undelegation of the $ATOM token
+            Inspect trading activities with a packed bubble chart
           </p>
         </a>
 
