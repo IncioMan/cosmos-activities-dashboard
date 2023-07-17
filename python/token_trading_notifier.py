@@ -33,6 +33,29 @@ pipenv run jupyter nbconvert --to python token_trading_notifier.ipynb
 """
 """
 pipenv run python token_trading_notifier.py \
+--address "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6" \
+--token_name "ASTRO" \
+--varReturnAsset 'axlUSDC' \
+--thresholdAmount 1000 \
+--notifier_id 1 \
+--finder_tx "https://chainsco.pe/terra2/tx/" \
+--finder_address "https://chainsco.pe/terra2/address/" \
+--rule_name 'Sell ASTRO'
+"""
+"""
+pipenv run python token_trading_notifier.py \
+--address "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6" \
+--token_name "ASTRO" \
+--buying \
+--varOfferAsset 'axlUSDC' \
+--thresholdAmount 1000 \
+--notifier_id 1 \
+--finder_tx "https://chainsco.pe/terra2/tx/" \
+--finder_address "https://chainsco.pe/terra2/address/" \
+--rule_name 'Buy ASTRO'
+"""
+"""
+pipenv run python token_trading_notifier.py \
 --address "kujira14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sl4e867" \
 --token_name "KUJI" \
 --varReturnAsset 'axlUSDC' \
@@ -44,14 +67,15 @@ pipenv run python token_trading_notifier.py \
 """
 """
 pipenv run python token_trading_notifier.py \
---address "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6" \
---token_name "ASTRO" \
---varReturnAsset 'axlUSDC' \
+--address "kujira14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sl4e867" \
+--token_name "KUJI" \
+--buying \
+--varOfferAsset 'axlUSDC' \
 --thresholdAmount 1000 \
---notifier_id 1 \
---finder_tx "https://chainsco.pe/terra2/tx/" \
---finder_address "https://chainsco.pe/terra2/address/" \
---rule_name 'Sell ASTRO'
+--rule_name 'Buy KUJI' \
+--finder_tx 'https://finder.kujira.network/kaiyo-1/tx/' \
+--finder_address 'https://finder.kujira.network/kaiyo-1/address/' \
+--notifier_id 4 
 """
 
 
@@ -313,10 +337,11 @@ Tx: [{shortAddress(row.txHash)}]({finder_tx}{row.txHash})
 """.replace(".","\."))
 
 
-# In[433]:
+# In[438]:
 
 
-bot_token = '6383968748:AAGKNNorLHvQ2edoLXfB3bTye9bu439htMM'
+import os
+bot_token = os.getenv('BOT_TOKEN')
 
 
 # In[434]:
@@ -337,7 +362,6 @@ print(messages)
 
 
 import asyncio
-
 async def main():
     try:
         await bot.initialize()
