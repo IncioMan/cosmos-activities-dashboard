@@ -49,7 +49,7 @@ pipenv run python token_trading_notifier.py \
 --buying \
 --varOfferAsset 'axlUSDC' \
 --thresholdAmount 1000 \
---notifier_id 1 \
+--notifier_id 2 \
 --finder_tx "https://chainsco.pe/terra2/tx/" \
 --finder_address "https://chainsco.pe/terra2/address/" \
 --rule_name 'Buy ASTRO'
