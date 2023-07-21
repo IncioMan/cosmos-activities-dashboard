@@ -10,6 +10,8 @@ jupyterlab = "*"
 matplotlib = "*"
 boto3 = "*"
 python-telegram-bot = "*"
+pytest = "*"
+telebot = "*"
 
 [dev-packages]
 

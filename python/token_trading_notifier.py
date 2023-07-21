@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[391]:
+# In[39]:
 
 
 import requests
@@ -10,12 +10,11 @@ import pandas as pd
 import time
 import re
 import urllib
-import matplotlib
 import numpy as np
 pd.set_option('display.max_colwidth', None)
 
 
-# In[392]:
+# In[40]:
 
 
 try:
@@ -25,7 +24,9 @@ except Exception as e:
     log = None
 
 
-# In[393]:
+# ### Configuration
+
+# In[41]:
 
 
 """
@@ -49,7 +50,7 @@ pipenv run python token_trading_notifier.py \
 --buying \
 --varOfferAsset 'axlUSDC' \
 --thresholdAmount 1000 \
---notifier_id 2 \
+--notifier_id 1 \
 --finder_tx "https://chainsco.pe/terra2/tx/" \
 --finder_address "https://chainsco.pe/terra2/address/" \
 --rule_name 'Buy ASTRO'
@@ -79,7 +80,77 @@ pipenv run python token_trading_notifier.py \
 """
 
 
-# In[394]:
+# In[42]:
+
+
+"""
+address = "kujira14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sl4e867"
+token_name = "KUJI"
+buying = False
+calculateUsdcValue = False
+varReturnAsset = 'axlUSDC'
+thresholdAmount = 100
+notifier_id = 3
+rule_name = 'Sell KUJI'
+finder_tx = 'https://finder.kujira.network/kaiyo-1/tx/'
+finder_address = 'https://finder.kujira.network/kaiyo-1/address/'
+"""
+
+
+# In[43]:
+
+
+"""
+address = "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6"
+token_name = "ASTRO"
+buying = False
+calculateUsdcValue = False
+varReturnAsset = 'axlUSDC'
+thresholdAmount = 1
+notifier_id = 1
+finder_tx = "https://chainsco.pe/terra2/tx/"
+finder_address = "https://chainsco.pe/terra2/address/"
+rule_name = 'Sell ASTRO'
+"""
+
+
+# In[44]:
+
+
+"""
+address = "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6"
+token_name = "ASTRO"
+buying = True
+varOfferAsset = 'axlUSDC'
+calculateUsdcValue = False
+thresholdAmount = 1
+notifier_id = 2
+finder_tx = "https://chainsco.pe/terra2/tx/"
+finder_address = "https://chainsco.pe/terra2/address/"
+rule_name = 'Buy ASTRO'
+"""
+
+
+# In[45]:
+
+
+"""
+address = "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs"
+token_name = "MARS"
+buying = True
+varOfferAsset = 'uosmo'
+calculateUsdcValue = True
+thresholdAmount = 1
+notifier_id = 5
+finder_tx = "https://chainsco.pe/osmosis/tx/"
+finder_address = "https://chainsco.pe/osmosis/address/"
+rule_name='Buy MARS'
+"""
+
+
+# ### Code
+
+# In[46]:
 
 
 import argparse
@@ -117,74 +188,7 @@ finder_address = args.finder_address
 finder_tx = args.finder_tx
 
 
-# In[395]:
-
-
-"""
-address = "kujira14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sl4e867"
-token_name = "KUJI"
-buying = False
-calculateUsdcValue = False
-varReturnAsset = 'axlUSDC'
-thresholdAmount = 100
-notifier_id = 3
-rule_name = 'Sell KUJI'
-finder_tx = 'https://finder.kujira.network/kaiyo-1/tx/'
-finder_address = 'https://finder.kujira.network/kaiyo-1/address/'
-"""
-
-
-# In[418]:
-
-
-"""
-address = "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6"
-token_name = "ASTRO"
-buying = False
-calculateUsdcValue = False
-varReturnAsset = 'axlUSDC'
-thresholdAmount = 1
-notifier_id = 1
-finder_tx = "https://chainsco.pe/terra2/tx/"
-finder_address = "https://chainsco.pe/terra2/address/"
-rule_name = 'Sell ASTRO'
-"""
-
-
-# In[419]:
-
-
-"""
-address = "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6"
-token_name = "ASTRO"
-buying = True
-varOfferAsset = 'axlUSDC'
-calculateUsdcValue = False
-thresholdAmount = 1
-notifier_id = 2
-finder_tx = "https://chainsco.pe/terra2/tx/"
-finder_address = "https://chainsco.pe/terra2/address/"
-rule_name = 'Buy ASTRO'
-"""
-
-
-# In[420]:
-
-
-"""
-address = "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs"
-token_name = "MARS"
-buying = True
-varOfferAsset = 'uosmo'
-calculateUsdcValue = True
-thresholdAmount = 1
-notifier_id = 5
-finder_tx = "https://chainsco.pe/osmosis/tx/"
-finder_address = "https://chainsco.pe/osmosis/address/"
-"""
-
-
-# In[421]:
+# In[47]:
 
 
 def get_txs_time_period(_from, _to):
@@ -215,7 +219,7 @@ def get_txs_time_period(_from, _to):
     return _df
 
 
-# In[422]:
+# In[48]:
 
 
 from datetime import datetime, timedelta
@@ -228,28 +232,28 @@ if not notifier_id in log['notifier_id'].tolist():
     log = pd.concat([log,_log])
 
 
-# In[423]:
+# In[49]:
 
 
 last_parsing_date = log[log.notifier_id == notifier_id].last_parsing_date.tolist()[0]
 last_parsing_date = datetime.strptime(last_parsing_date, '%Y-%m-%d %H:%M:%S.%f')
 
 
-# In[424]:
+# In[50]:
 
 
 print(f"Filling the upper gap from {current_date.strftime('%Y-%m-%d %H:%M:%S')} to {last_parsing_date.strftime('%Y-%m-%d %H:%M:%S')}")
 df = get_txs_time_period(current_date, last_parsing_date)
 
 
-# In[425]:
+# In[51]:
 
 
 from pytz import UTC
 df = df[df.timestamp > pd.Timestamp(last_parsing_date, tz=UTC)]
 
 
-# In[426]:
+# In[52]:
 
 
 assets = {
@@ -261,7 +265,7 @@ assets = {
 }
 
 
-# In[427]:
+# In[53]:
 
 
 df = df.drop_duplicates(ignore_index=True)
@@ -269,13 +273,13 @@ df.returnAsset = df.returnAsset.replace(assets)
 df.offerAsset = df.offerAsset.replace(assets)
 
 
-# In[428]:
+# In[54]:
 
 
 df['date'] = df.timestamp.apply(lambda x: x.strftime("%Y-%m-%d"))
 
 
-# In[429]:
+# In[55]:
 
 
 if(calculateUsdcValue):
@@ -296,7 +300,7 @@ else:
         df['targetAmount'] = df.returnAmount
 
 
-# In[430]:
+# In[56]:
 
 
 if(buying):
@@ -305,14 +309,16 @@ else:
     txs_to_notify = df[(df.targetAmount > thresholdAmount) & (df.returnAsset == varReturnAsset)]
 
 
-# In[431]:
+# In[57]:
 
 
 def shortAddress(address):
     return address[:7] + "..." + address[-6:]
 
 
-# In[432]:
+# ### Create Telegram Messages
+
+# In[58]:
 
 
 messages = []
@@ -337,14 +343,16 @@ Tx: [{shortAddress(row.txHash)}]({finder_tx}{row.txHash})
 """.replace(".","\."))
 
 
-# In[438]:
+# ### Send Messages
+
+# In[59]:
 
 
 import os
 bot_token = os.getenv('BOT_TOKEN')
 
 
-# In[434]:
+# In[60]:
 
 
 import telegram
@@ -352,16 +360,17 @@ from telegram.constants import ParseMode
 bot = telegram.Bot(token=bot_token)
 
 
-# In[435]:
+# In[61]:
 
 
 print(messages)
 
 
-# In[390]:
+# In[63]:
 
 
 import asyncio
+
 async def main():
     try:
         await bot.initialize()
@@ -375,27 +384,46 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
 
 
-# In[247]:
+# ### Update logging file
+
+# In[64]:
 
 
 _last_parsing_date = df.timestamp.max().to_pydatetime().replace(tzinfo=None)
 last_parsing_date = _last_parsing_date if len(df) > 0 else current_date
 
 
-# In[112]:
+# In[69]:
 
 
-log.loc[log.notifier_id == notifier_id, 'last_parsing_date'] = last_parsing_date
+import boto3
+s3 = boto3.client('s3')
+
+bucket_name='incioman-data-analysis'
+file_path_in_bucket = '/data/token_notifier/notifier_logging.csv'
+
+def load_log():
+    # Load the CSV file from S3
+    obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
+    df = pd.read_csv(obj['Body'])
+    return df
+
+def update_log(log, notifier_id, last_parsing_date):
+    log.loc[log.notifier_id == notifier_id, 'last_parsing_date'] = last_parsing_date
+    csv_buffer = log.to_csv(index=False)
+    s3 = boto3.client('s3')
+    s3.put_object(Bucket=bucket_name, Key=file_path_in_bucket, Body=csv_buffer)
+    return load_log()
 
 
-# In[324]:
+# In[70]:
 
 
-log
+update_log(log, notifier_id, last_parsing_date)
 
 
-# In[325]:
+# In[ ]:
 
 
-log.to_csv(f"./notifier_logging.csv", index=False)
+
 
