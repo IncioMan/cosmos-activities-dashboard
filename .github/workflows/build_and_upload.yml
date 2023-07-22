@@ -15,17 +15,15 @@ jobs:
         run: |
           pip install pipenv
 
-      - name: Cd into workdir
-        run: |
-          cd python/lambdas/token_trades_notifier
-
       - name: Setup Python environment with pipenv
         run: |
           pipenv install
+        working-directory: python/lambdas/token_trades_notifier
       
       - name: Build zip
         run: |
           bash ../scripts/package.sh
+        working-directory: python/lambdas/token_trades_notifier
         
       - name: Upload to S3
         uses: aws-actions/configure-aws-credentials@v1
@@ -33,4 +31,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1  # Replace with your actual AWS region
-      - run: aws s3 cp my-deployment-package.zip s3://incioman-data-analysis/my-deployment-package.zip --profile local-dev
+        run: aws s3 cp my-deployment-package.zip s3://incioman-data-analysis/my-deployment-package.zip --profile local-dev
+        working-directory: python/lambdas/token_trades_notifier
