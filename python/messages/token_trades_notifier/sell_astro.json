@@ -1,7 +1,7 @@
 {
     "address": "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6",
     "token_name": "ASTRO",
-    "buying": true,
+    "buying": false,
     "varReturnAsset": "axlUSDC",
     "calculateUsdcValue": false,
     "thresholdAmount": 10,

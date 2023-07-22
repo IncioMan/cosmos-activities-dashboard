@@ -1,0 +1,12 @@
+{
+    "address": "kujira14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sl4e867",
+    "token_name": "KUJI",
+    "buying": false,
+    "varReturnAsset": "axlUSDC",
+    "calculateUsdcValue": false,
+    "thresholdAmount": 10,
+    "notifier_id": 3,
+    "finder_tx": "https://finder.kujira.network/kaiyo-1/tx/",
+    "finder_address": "https://finder.kujira.network/kaiyo-1/address/",
+    "rule_name": "Sell KUJI"
+}

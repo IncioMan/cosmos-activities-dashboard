@@ -1,7 +1,6 @@
 import json
 import telebot
 import os
-
 import time
 import pandas as pd
 import urllib
@@ -108,7 +107,7 @@ def get_messages(df, calculateUsdcValue, buying,
             df['targetAmount'] = df.offerAmount
         else :
             print("Selling amount...")
-        df['targetAmount'] = df.returnAmount
+            df['targetAmount'] = df.returnAmount
 
     if(buying):
         txs_to_notify = df[(df.targetAmount > thresholdAmount) & (df.offerAsset == varOfferAsset)]
@@ -130,11 +129,11 @@ def get_messages(df, calculateUsdcValue, buying,
             else:
                 swap_msg = f"""Swapped ${token_name} for {round(row.targetAmount, 2)} ${varReturnAsset}"""
         messages.append(f"""
-    *{rule_name}*
+*{rule_name}*
 
-    {swap_msg}
-    Trader: [{shortAddress(row.traderAddress)}]({finder_address}{row.traderAddress})
-    Tx: [{shortAddress(row.txHash)}]({finder_tx}{row.txHash})
+{swap_msg}
+Trader: [{shortAddress(row.traderAddress)}]({finder_address}{row.traderAddress})
+Tx: [{shortAddress(row.txHash)}]({finder_tx}{row.txHash})
     """.replace(".","\."))
         
     return messages
@@ -167,6 +166,7 @@ def lambda_handler(event, context):
 
     log = load_log()
     current_date, last_parsing_date, log = get_dates(log, notifier_id)
+    print(f"Filling the upper gap from {current_date.strftime('%Y-%m-%d %H:%M:%S')} to {last_parsing_date.strftime('%Y-%m-%d %H:%M:%S')}")
     df = get_txs_time_period(address, current_date, last_parsing_date)
 
     df = process_df(df, last_parsing_date)
@@ -175,6 +175,7 @@ def lambda_handler(event, context):
                  varOfferAsset, finder_tx, finder_address, 
                  token_name, rule_name)
 
+    print(messages)
     TOKEN = os.getenv('BOT_TOKEN','')
     chat_id = os.getenv('CHAT_ID','')
     tb = telebot.TeleBot(TOKEN)
@@ -190,7 +191,7 @@ def lambda_handler(event, context):
 
 
 if __name__ == "__main__":
-    with open('messages/message1.json', 'r') as file:
+    with open('messages/token_trades_notifier/sell_kuji.json', 'r') as file:
         event_data = json.load(file)
 
     # Invoke the Lambda function

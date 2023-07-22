@@ -2,8 +2,8 @@ FROM python:3.9
 
 RUN pip install pipenv
 
-WORKDIR /app
-COPY Pipfile* ./
+WORKDIR /app/notebooks
+COPY /notebooks/Pipfile* ./
 
 # Install dependencies using pipenv
 RUN pipenv install
