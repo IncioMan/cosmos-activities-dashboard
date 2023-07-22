@@ -4,7 +4,7 @@
     "buying": true,
     "varOfferAsset": "axlUSDC",
     "calculateUsdcValue": false,
-    "thresholdAmount": 10,
+    "thresholdAmount": 100,
     "notifier_id": 2,
     "finder_tx": "https://chainsco.pe/terra2/tx/",
     "finder_address": "https://chainsco.pe/terra2/address/",

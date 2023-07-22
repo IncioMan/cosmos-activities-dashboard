@@ -1,12 +1,12 @@
 {
-    "address": "osmo1x0ptme5tp8r2qw8gsypg3qftfwfpt2hdk4jyvp7gryywmg5l9fsqvhs8fk",
-    "token_name": "STRD",
+    "address": "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs",
+    "token_name": "MARS",
     "buying": true,
     "varOfferAsset": "uosmo",
     "calculateUsdcValue": true,
-    "thresholdAmount": 10,
-    "notifier_id": 7,
+    "thresholdAmount": 100,
+    "notifier_id": 5,
     "finder_tx": "https://chainsco.pe/osmosis/tx/",
     "finder_address": "https://chainsco.pe/osmosis/address/",
-    "rule_name": "Buy STRD"
+    "rule_name": "Buy MARS"
 }
