@@ -10,11 +10,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Install pipenv
+        run: |
+          pip install pipenv
+
+      - name: Cd into workdir
+        run: |
+          cd python/lambdas/token_trades_notifier
+
+      - name: Setup Python environment with pipenv
+        run: |
+          pipenv install
       
       - name: Build zip
         run: |
-          cd python/lambdas
-          cd token_trades_notifier
           bash ../scripts/package.sh
         
       - name: Upload to S3
