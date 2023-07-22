@@ -1,0 +1,12 @@
+{
+    "address": "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs",
+    "token_name": "MARS",
+    "buying": false,
+    "varReturnAsset": "uosmo",
+    "calculateUsdcValue": true,
+    "thresholdAmount": 100,
+    "notifier_id": 6,
+    "finder_tx": "https://chainsco.pe/osmosis/tx/",
+    "finder_address": "https://chainsco.pe/osmosis/address/",
+    "rule_name": "Sell MARS"
+}

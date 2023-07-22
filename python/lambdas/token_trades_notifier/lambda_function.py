@@ -122,7 +122,7 @@ def get_messages(df, calculateUsdcValue, buying,
             if(buying):
                 swap_msg = f"""Swapped {round(row.targetAmount, 2)} $USDC for ${token_name}"""
             else:
-                swap_msg = f"""Swapped ${token_name} for $USDC for {round(row.targetAmount, 2)} $USDC"""
+                swap_msg = f"""Swapped ${token_name} for {round(row.targetAmount, 2)} $USDC"""
         if(not calculateUsdcValue):
             if(buying):
                 swap_msg = f"""Swapped {round(row.targetAmount, 2)} ${row.offerAsset} for ${token_name}"""
