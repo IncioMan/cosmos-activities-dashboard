@@ -9,7 +9,7 @@ async function loadData() {
   try {
     const response = await fetch(
       'https://api.flipsidecrypto.com/api/v2/queries/ad69e563-319b-483e-9ef6-9512900783de/data/latest'
-    );
+      , { cache: 'no-cache' });
     const jsonData: Undelegation[] = await response.json();
     jsonData.map((u: Undelegation) => {
       u.COMPLETION_TIME = new Date(u.COMPLETION_TIME)
@@ -59,6 +59,7 @@ export default async function Home() {
     return u1.COMPLETION_TIME >= currentTime
   }).sort((u1: Undelegation, u2: Undelegation) => u2.AMOUNT - u1.AMOUNT);
   const groupedData = sortedData ? groupData(sortedData) : []
+
 
   return <>
     <div className="min-h-screen flex flex-col px-4 py-8">
