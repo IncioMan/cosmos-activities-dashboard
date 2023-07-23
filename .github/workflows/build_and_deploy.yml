@@ -1,0 +1,86 @@
+name: Build and Upload to S3
+on:
+  push:
+    branches:
+      - main  # Adjust this to the branch you want to trigger the action on
+
+jobs:
+  build_and_deploy_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+        
+      - name: Install pipenv
+        run: |
+          pip install pipenv
+
+      - name: Setup Python environment with pipenv
+        run: |
+          pipenv install
+        working-directory: python/lambdas/token_trades_notifier
+      
+      - name: Build zip
+        run: |
+          bash ../scripts/package.sh
+        working-directory: python/lambdas/token_trades_notifier
+        
+      - name: Upload to S3
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1  # Replace with your actual AWS region
+      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/artifacts/token_trades_notifier/lambda.zip
+        working-directory: python/lambdas/token_trades_notifier
+
+  deploy_cloudformation:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, 'cloudformation/') }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Check if the stack exists
+        id: check-stack
+        run: |
+          if aws cloudformation describe-stacks --stack-name token-trades-notifier-stack; then
+            echo "Stack exists"
+            echo "::set-output name=stack_exists::true"
+          else
+            echo "Stack does not exist"
+            echo "::set-output name=stack_exists::false"
+          fi
+
+      - name: Update CloudFormation stack
+        if: ${{ steps.check-stack.outputs.stack_exists == 'true' }}
+        run: |
+          aws cloudformation update-stack \
+            --stack-name token-trades-notifier-stack \
+            --template-body file://cloudformation/lambda.yml \
+            --parameters ParameterKey=LambdaFunctionName,ParameterValue=token-trades-notifier \
+              ParameterKey=BotTokenValue,ParameterValue=6383968748:AAGKNNorLHvQ2edoLXfB3bTye9bu439htMM \
+            --capabilities CAPABILITY_NAMED_IAM
+
+      - name: Create CloudFormation stack
+        if: ${{ steps.check-stack.outputs.stack_exists == 'false' }}
+        run: |
+          aws cloudformation deploy \
+            --stack-name token-trades-notifier-stack \
+            --template-file cloudformation/lambda.yml \
+            --parameter-overrides LambdaFunctionName=token-trades-notifier \
+                                  BotTokenValue=${{ secrets.BOT_TOKEN }} \
+            --capabilities CAPABILITY_NAMED_IAM

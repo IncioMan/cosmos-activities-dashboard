@@ -1,28 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for a Lambda function with S3 access and scheduled CloudWatch Event trigger
+
+Parameters:
+  LambdaFunctionName:
+    Type: String
+    Default: MyLambdaFunction
+    Description: Name of the Lambda function
+  BotTokenValue:
+    Type: String
+    Default: ''
+    Description: Token for the Telegram Bot
+
 Resources:
-  MyLambdaFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: MyLambdaFunction
-      Runtime: python3.8
-      Handler: index.lambda_handler
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Code:
-        ZipFile: |
-          import json
-          import boto3
-
-          def lambda_handler(event, context):
-              s3 = boto3.client('s3')
-              # Your Lambda function logic here
-              return {
-                  'statusCode': 200,
-                  'body': json.dumps('Hello from Lambda!')
-              }
-
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: LambdaExecutionRole
+      RoleName: !Sub "${LambdaFunctionName}-lambda-role"
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -30,6 +23,236 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: LambdaS3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub "arn:aws:s3:::incioman-data-analysis/*"
+        - PolicyName: LambdaCloudWatchLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}:*"
 
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${LambdaFunctionName}-lambda"
+      Handler: lambda_function.lambda_handler # Replace 'index' with the name of your Lambda function file (without the extension)
+      Runtime: python3.9 # Replace with the appropriate runtime if your Lambda function is in a different language
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: incioman-data-analysis # Replace 'your-s3-bucket' with the S3 bucket containing your Lambda code
+        S3Key: artifacts/token_trades_notifier/lambda.zip # Replace 'lambda_function.zip' with the actual zip file name
+      Timeout: 180 # Set an appropriate timeout for your Lambda function
+      Environment: # Add environment variables here
+        Variables:
+          BOT_TOKEN: !Ref BotTokenValue
+          CHAT_ID: 92383009
+
+  CloudWatchEventRuleSellAstro:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-sell-astro"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-EventTarget"
+          Input: |
+            {
+              "address": "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6",
+              "token_name": "ASTRO",
+              "buying": false,
+              "varReturnAsset": "axlUSDC",
+              "calculateUsdcValue": false,
+              "thresholdAmount": 1000,
+              "notifier_id": 1,
+              "finder_tx": "https://chainsco.pe/terra2/tx/",
+              "finder_address": "https://chainsco.pe/terra2/address/",
+              "rule_name": "Sell ASTRO"
+            }
+
+  LambdaEventPermissionSellAstro:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleSellAstro.Arn
+  
+  CloudWatchEventRuleBuyAstro:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-buy-astro"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-event-target"
+          Input: |
+            {
+                "address": "terra1w579ysjvpx7xxhckxewk8sykxz70gm48wpcuruenl29rhe6p6raslhj0m6",
+                "token_name": "ASTRO",
+                "buying": true,
+                "varOfferAsset": "axlUSDC",
+                "calculateUsdcValue": false,
+                "thresholdAmount": 1000,
+                "notifier_id": 2,
+                "finder_tx": "https://chainsco.pe/terra2/tx/",
+                "finder_address": "https://chainsco.pe/terra2/address/",
+                "rule_name": "Buy ASTRO"
+            }
+  
+  LambdaEventPermissionBuyAstro:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleBuyAstro.Arn
+
+  CloudWatchEventRuleBuyStride:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-buy-stride"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-event-target"
+          Input: |
+            {
+                "address": "osmo1x0ptme5tp8r2qw8gsypg3qftfwfpt2hdk4jyvp7gryywmg5l9fsqvhs8fk",
+                "token_name": "STRD",
+                "buying": true,
+                "varOfferAsset": "uosmo",
+                "calculateUsdcValue": true,
+                "thresholdAmount": 1000,
+                "notifier_id": 7,
+                "finder_tx": "https://chainsco.pe/osmosis/tx/",
+                "finder_address": "https://chainsco.pe/osmosis/address/",
+                "rule_name": "Buy STRD"
+            }
+  
+  LambdaEventPermissionBuyStride:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleBuyStride.Arn
+    
+  CloudWatchEventRuleSellStride:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-sell-stride"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-event-target"
+          Input: |
+            {
+                "address": "osmo1x0ptme5tp8r2qw8gsypg3qftfwfpt2hdk4jyvp7gryywmg5l9fsqvhs8fk",
+                "token_name": "STRD",
+                "buying": false,
+                "varReturnAsset": "uosmo",
+                "calculateUsdcValue": true,
+                "thresholdAmount": 1000,
+                "notifier_id": 8,
+                "finder_tx": "https://chainsco.pe/osmosis/tx/",
+                "finder_address": "https://chainsco.pe/osmosis/address/",
+                "rule_name": "Sell STRD"
+            }
+  
+  LambdaEventPermissionSellStride:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleSellStride.Arn
+   
+  CloudWatchEventRuleBuyMars:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-buy-mars"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-event-target"
+          Input: |
+            {
+                "address": "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs",
+                "token_name": "MARS",
+                "buying": true,
+                "varOfferAsset": "uosmo",
+                "calculateUsdcValue": true,
+                "thresholdAmount": 1000,
+                "notifier_id": 5,
+                "finder_tx": "https://chainsco.pe/osmosis/tx/",
+                "finder_address": "https://chainsco.pe/osmosis/address/",
+                "rule_name": "Buy MARS"
+            }
+  
+  LambdaEventPermissionBuyMars:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleBuyMars.Arn
+    
+  CloudWatchEventRuleSellMars:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-sell-mars"
+      ScheduleExpression: "rate(30 minutes)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-event-target"
+          Input: |
+            {
+                "address": "osmo1752ysawy2adr7td9an30a8pkk8ngrvcq3tan08lvnar3s7f82y5s4dt8fs",
+                "token_name": "MARS",
+                "buying": false,
+                "varReturnAsset": "uosmo",
+                "calculateUsdcValue": true,
+                "thresholdAmount": 1000,
+                "notifier_id": 6,
+                "finder_tx": "https://chainsco.pe/osmosis/tx/",
+                "finder_address": "https://chainsco.pe/osmosis/address/",
+                "rule_name": "Sell MARS"
+            }
+  
+  LambdaEventPermissionSellMars:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleSellMars.Arn
+    
+
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt LambdaFunction.Arn
+  LambdaExecutionRoleArn:
+    Description: ARN of the IAM role used by the Lambda function
+    Value: !GetAtt LambdaExecutionRole.Arn
