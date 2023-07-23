@@ -43,7 +43,7 @@ Resources:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}:*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}-lambda:*"
 
   LambdaFunction:
     Type: AWS::Lambda::Function
@@ -247,7 +247,6 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !GetAtt CloudWatchEventRuleSellMars.Arn
     
-
 
 Outputs:
   LambdaFunctionArn:
