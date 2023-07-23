@@ -65,7 +65,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-sell-astro"
-      ScheduleExpression: "rate(30 minutes)"
+      ScheduleExpression: "rate(2 minutes)"
       State: "ENABLED"
       Targets:
         - Arn: !GetAtt LambdaFunction.Arn
