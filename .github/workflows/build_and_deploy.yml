@@ -41,6 +41,7 @@ jobs:
 
   deploy_cloudformation:
     runs-on: ubuntu-latest
+    needs: build_and_deploy_artifact
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -71,6 +72,7 @@ jobs:
             --template-body file://cloudformation/lambda.yml \
             --parameters ParameterKey=LambdaFunctionName,ParameterValue=token-trades-notifier \
               ParameterKey=BotTokenValue,ParameterValue=6383968748:AAGKNNorLHvQ2edoLXfB3bTye9bu439htMM \
+            --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_NAMED_IAM
 
       - name: Create CloudFormation stack
