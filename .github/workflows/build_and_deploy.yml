@@ -2,7 +2,10 @@ name: Build and Upload to S3
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you want to trigger the action on
+      - main 
+    paths:
+      - 'cloudformation/**'
+      - 'python/lambdas/**'
 
 jobs:
   build_and_deploy_artifact:
@@ -53,34 +56,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1
 
-      - name: Check if the stack exists
-        id: check-stack
-        run: |
-          if aws cloudformation describe-stacks --stack-name token-trades-notifier-stack; then
-            echo "Stack exists"
-            echo "::set-output name=stack_exists::true"
-          else
-            echo "Stack does not exist"
-            echo "::set-output name=stack_exists::false"
-          fi
-
-      - name: Update CloudFormation stack
-        if: ${{ steps.check-stack.outputs.stack_exists == 'true' }}
-        run: |
-          aws cloudformation update-stack \
-            --stack-name token-trades-notifier-stack \
-            --template-body file://cloudformation/lambda.yml \
-            --parameters ParameterKey=LambdaFunctionName,ParameterValue=token-trades-notifier \
-              ParameterKey=BotTokenValue,ParameterValue=6383968748:AAGKNNorLHvQ2edoLXfB3bTye9bu439htMM \
-            --no-fail-on-empty-changeset \
-            --capabilities CAPABILITY_NAMED_IAM
-
-      - name: Create CloudFormation stack
-        if: ${{ steps.check-stack.outputs.stack_exists == 'false' }}
+      - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
             --stack-name token-trades-notifier-stack \
             --template-file cloudformation/lambda.yml \
             --parameter-overrides LambdaFunctionName=token-trades-notifier \
                                   BotTokenValue=${{ secrets.BOT_TOKEN }} \
+            --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_NAMED_IAM
