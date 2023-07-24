@@ -60,7 +60,7 @@ jobs:
       - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
-            --stack-name token-trades-notifier-stack \
+            --stack-name addr-movements-notifier-stack \
             --template-file cloudformation/addr_movements_notifier.yml \
             --parameter-overrides LambdaFunctionName=token-trades-notifier \
                                   BotTokenValue=${{ secrets.BOT_TOKEN }} \
