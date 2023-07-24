@@ -14,40 +14,56 @@ bucket_name='incioman-data-analysis'
 file_path_in_bucket = 'data/addr_movements_notifier/notifier_logging.csv'
 
 def load_log():
-    # Load the CSV file from S3
-    obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
-    df = pd.read_csv(obj['Body'])
+    try:
+        # Load the CSV file from S3
+        obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
+        df = pd.read_csv(obj['Body'])
+        print("Loaded logs", df)
+    except Exception as e:
+        print("Error loading logs: ", e)
+        return pd.DataFrame([['', '']], columns=['address','last_tx_date'])
     return df
 
-def update_log(log, notifier_id, last_tx_date):
-    log.loc[log.notifier_id == notifier_id, 'last_tx_date'] = last_tx_date
+def update_log(log, address, last_tx_date):
+    print(f"Updating logs for address {address} with date {last_tx_date}")
+    log.loc[log.address == address, 'last_tx_date'] = last_tx_date
+    print(log)
     csv_buffer = log.to_csv(index=False)
     s3 = boto3.client('s3')
     s3.put_object(Bucket=bucket_name, Key=file_path_in_bucket, Body=csv_buffer)
     return load_log()
 
-def get_txs_after_date(address, start_date, api_endpoint):
-    #todo
-    pass
+def get_txs_after_date(address, last_date, api_endpoint):
+    url = api_endpoint.format(address, 25, 0)
 
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    }
 
-    current_date = datetime.now()
-    _log = pd.DataFrame([(notifier_id, (current_date - timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S.%f'))], columns=['notifier_id','last_parsing_date'])
-    if log is None:
-        log = _log
-    if not notifier_id in log['notifier_id'].tolist():
-        log = pd.concat([log,_log])
-
-    last_parsing_date = log[log.notifier_id == notifier_id].last_parsing_date.tolist()[0]
-    last_parsing_date = datetime.strptime(last_parsing_date, '%Y-%m-%d %H:%M:%S.%f')
-    return current_date, last_parsing_date, log
+    response = requests.get(url, headers=headers)
+    tt = pd.json_normalize(response.json(), record_path=['data', 'tx','body','messages'], meta=['data'])
+    tt['txhash'] = tt.data.apply(lambda x: x['txhash'])
+    tt['timestamp'] = pd.to_datetime(tt.data.apply(lambda x: x['timestamp']))
+    tt = tt.drop(columns=['data'])
+    tt['timestamp_str'] = tt.timestamp.dt.strftime("%Y-%m-%d %H:%M:%S")
+    txs_to_notify = tt[tt['timestamp_str'] > last_date]
+    return txs_to_notify
 
 def shortAddress(address):
     return address[:7] + "..." + address[-6:]
 
-def get_messages(txs):
-    #pass
-    pass
+def get_messages(txs, address, address_desc, finder_address, finder_tx):
+    messages = []
+    txs_ = txs.sort_values(by='timestamp', ascending=False).head(1)
+    for i, row in txs_.iterrows():
+        messages.append(f"""
+*{address_desc}*
+
+Message type: {row['@type']}
+Trader: [{shortAddress(address)}]({finder_address}{address})
+Tx: [{shortAddress(row.txhash)}]({finder_tx}{row.txhash})
+    """.replace(".","\."))
+    return messages
 
 def send_messages(tb, chat_id, messages):
     for message in messages:
@@ -60,21 +76,34 @@ def lambda_handler(event, context):
     assert 'address' in event
     assert 'address_desc' in event
     assert 'start_date' in event
+    assert 'finder_address' in event
+    assert 'finder_tx' in event
 
     address = event['address']
     address_desc = event['address_desc']
     start_date = event['start_date']
-    limit = 5
-    from_ = 0
+    finder_address = event['finder_address']
+    finder_tx = event['finder_tx']
     api_endpoint = 'https://api.mintscan.io/v1/cosmos/account/{}/txs?limit={}&from={}'
     
 
     log = load_log()
-    print(f"Checking movements for address {address} from date {start_date}")
-    txs = get_txs_after_date(address, start_date, api_endpoint)
+    try:
+        last_date = min(start_date, log[log.address==address].last_tx_date[0])
+    except Exception as e:
+        print("Using start_date because error ", e)
+        last_date = start_date
+    print(f"Checking movements for address {address} from date {last_date}")
+    txs = get_txs_after_date(address, last_date, api_endpoint)
 
-    messages = get_messages(txs)
-
+    if((not txs is None) and len(txs)>0):
+        messages = get_messages(txs, address, address_desc, finder_address, finder_tx)
+    else:
+        print("No txs to notify")
+        return {
+        'statusCode': 200
+    }
+    
     print(messages)
     TOKEN = os.getenv('BOT_TOKEN','')
     chat_id = os.getenv('CHAT_ID','')

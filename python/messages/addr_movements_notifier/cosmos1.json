@@ -2,5 +2,7 @@
     "address": "cosmos183cfm6x88std8md977h2gc0x6a9am4ryxy5s8c",
     "notifier_id": 1,
     "start_date": "2023-07-23",
-    "address_desc": "Whale who unlocked 700k ATOM on 5th of July"
+    "address_desc": "Whale who unlocked 700k ATOM on 5th of July",
+    "finder_tx": "https://www.mintscan.io/cosmos/transactions/",
+    "finder_address": "https://www.mintscan.io/cosmos/accounts/"
 }
