@@ -26,7 +26,12 @@ def load_log():
 
 def update_log(log, address, last_tx_date):
     print(f"Updating logs for address {address} with date {last_tx_date}")
-    log.loc[log.address == address, 'last_tx_date'] = last_tx_date
+    if log.loc[log['address'] == address].empty:
+        # If the condition is not satisfied, append a new row to the DataFrame
+        new_row = pd.DataFrame([[address,last_tx_date]], columns=['address','last_tx_date'])
+        log = pd.concat([log, new_row])
+    else:
+        log.loc[log.address == address, 'last_tx_date'] = last_tx_date
     print(log)
     csv_buffer = log.to_csv(index=False)
     s3 = boto3.client('s3')
@@ -98,20 +103,21 @@ def lambda_handler(event, context):
 
     if((not txs is None) and len(txs)>0):
         messages = get_messages(txs, address, address_desc, finder_address, finder_tx)
+    
+        print(messages)
+        TOKEN = os.getenv('BOT_TOKEN','')
+        chat_id = os.getenv('CHAT_ID','')
+        tb = telebot.TeleBot(TOKEN)
+        send_messages(tb, chat_id, messages)
+
+        last_tx_date = txs.timestamp.max().to_pydatetime().replace(tzinfo=None)
+        update_log(log, address, last_tx_date) 
     else:
         print("No txs to notify")
+        update_log(log, address, last_date) 
         return {
         'statusCode': 200
     }
-    
-    print(messages)
-    TOKEN = os.getenv('BOT_TOKEN','')
-    chat_id = os.getenv('CHAT_ID','')
-    tb = telebot.TeleBot(TOKEN)
-    send_messages(tb, chat_id, messages)
-
-    last_tx_date = txs.timestamp.max().to_pydatetime().replace(tzinfo=None)
-    update_log(log, address, last_tx_date) 
 
     return {
         'statusCode': 200

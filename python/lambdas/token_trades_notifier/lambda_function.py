@@ -20,7 +20,12 @@ def load_log():
     return df
 
 def update_log(log, notifier_id, last_parsing_date):
-    log.loc[log.notifier_id == notifier_id, 'last_parsing_date'] = last_parsing_date
+    if log.loc[log.notifier_id == notifier_id].empty:
+        # If the condition is not satisfied, append a new row to the DataFrame
+        new_row = pd.DataFrame([[notifier_id,last_parsing_date]], columns=['notifier_id','last_parsing_date'])
+        log = pd.concat([log, new_row])
+    else:
+        log.loc[log.notifier_id == notifier_id, 'last_parsing_date'] = last_parsing_date
     csv_buffer = log.to_csv(index=False)
     s3 = boto3.client('s3')
     s3.put_object(Bucket=bucket_name, Key=file_path_in_bucket, Body=csv_buffer)
