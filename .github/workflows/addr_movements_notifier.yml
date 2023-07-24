@@ -27,12 +27,12 @@ jobs:
       - name: Setup Python environment with pipenv
         run: |
           pipenv install
-        working-directory: python/lambdas/token_trades_notifier
+        working-directory: python/lambdas/addr_movements_notifier
       
       - name: Build zip
         run: |
           bash ../scripts/package.sh
-        working-directory: python/lambdas/token_trades_notifier
+        working-directory: python/lambdas/addr_movements_notifier
         
       - name: Upload to S3
         uses: aws-actions/configure-aws-credentials@v1
@@ -40,8 +40,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1  # Replace with your actual AWS region
-      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/artifacts/token_trades_notifier/lambda.zip
-        working-directory: python/lambdas/token_trades_notifier
+      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/artifacts/addr_movements_notifier/lambda.zip
+        working-directory: python/lambdas/addr_movements_notifier
 
   deploy_cloudformation:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
         run: |
           aws cloudformation deploy \
             --stack-name token-trades-notifier-stack \
-            --template-file cloudformation/lambda.yml \
+            --template-file cloudformation/addr_movements_notifier.yml \
             --parameter-overrides LambdaFunctionName=token-trades-notifier \
                                   BotTokenValue=${{ secrets.BOT_TOKEN }} \
             --no-fail-on-empty-changeset \

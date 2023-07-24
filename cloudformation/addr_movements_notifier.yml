@@ -1,0 +1,97 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template for a Lambda function with S3 access and scheduled CloudWatch Event trigger
+
+Parameters:
+  LambdaFunctionName:
+    Type: String
+    Default: MyLambdaFunction
+    Description: Name of the Lambda function
+  BotTokenValue:
+    Type: String
+    Default: ''
+    Description: Token for the Telegram Bot
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${LambdaFunctionName}-lambda-role"
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaS3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub "arn:aws:s3:::incioman-data-analysis/*"
+        - PolicyName: LambdaCloudWatchLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}-lambda:*"
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${LambdaFunctionName}-lambda"
+      Handler: lambda_function.lambda_handler # Replace 'index' with the name of your Lambda function file (without the extension)
+      Runtime: python3.9 # Replace with the appropriate runtime if your Lambda function is in a different language
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: incioman-data-analysis # Replace 'your-s3-bucket' with the S3 bucket containing your Lambda code
+        S3Key: artifacts/addr_movements_notifier/lambda.zip # Replace 'lambda_function.zip' with the actual zip file name
+      Timeout: 180 # Set an appropriate timeout for your Lambda function
+      Environment: # Add environment variables here
+        Variables:
+          BOT_TOKEN: !Ref BotTokenValue
+          CHAT_ID: 92383009
+
+  CloudWatchEventRuleCosmosxy5s8c:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-cosmos-xy5s8c"
+      ScheduleExpression: "rate(1 day)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-EventTarget"
+          Input: |
+            {
+                "address": "cosmos183cfm6x88std8md977h2gc0x6a9am4ryxy5s8c",
+                "notifier_id": 1,
+                "start_date": "2023-07-23",
+                "address_desc": "Whale who unlocked 700k ATOM on 5th of July",
+                "finder_tx": "https://www.mintscan.io/cosmos/transactions/",
+                "finder_address": "https://www.mintscan.io/cosmos/accounts/"
+            }
+
+  LambdaEventPermissionCosmosxy5s8c:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleCosmosxy5s8c.Arn    
+
+Outputs:
+  LambdaFunctionArn:
+    Description: ARN of the Lambda function
+    Value: !GetAtt LambdaFunction.Arn
+  LambdaExecutionRoleArn:
+    Description: ARN of the IAM role used by the Lambda function
+    Value: !GetAtt LambdaExecutionRole.Arn
