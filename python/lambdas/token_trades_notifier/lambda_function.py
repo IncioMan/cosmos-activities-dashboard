@@ -11,13 +11,17 @@ import boto3
 s3 = boto3.client('s3')
 
 bucket_name='incioman-data-analysis'
-file_path_in_bucket = 'data/token_notifier/notifier_logging.csv'
+file_path_in_bucket = 'data/token_trades_notifier/notifier_logging.csv'
 
 def load_log():
-    # Load the CSV file from S3
-    obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
-    df = pd.read_csv(obj['Body'])
-    return df
+    try:
+        # Load the CSV file from S3
+        obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
+        df = pd.read_csv(obj['Body'])
+        return df
+    except Exception as e:
+        print("Error loading logs: ", e)
+        return pd.DataFrame([[-1, '']], columns=['notifier_id','last_parsing_date'])
 
 def update_log(log, notifier_id, last_parsing_date):
     if log.loc[log.notifier_id == notifier_id].empty:
