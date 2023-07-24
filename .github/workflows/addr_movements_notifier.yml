@@ -62,7 +62,7 @@ jobs:
           aws cloudformation deploy \
             --stack-name addr-movements-notifier-stack \
             --template-file cloudformation/addr_movements_notifier.yml \
-            --parameter-overrides LambdaFunctionName=token-trades-notifier \
+            --parameter-overrides LambdaFunctionName=addr-movements-notifier \
                                   BotTokenValue=${{ secrets.BOT_TOKEN }} \
             --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_NAMED_IAM
