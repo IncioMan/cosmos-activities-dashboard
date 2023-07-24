@@ -53,7 +53,7 @@ export default async function Home() {
   const data: Undelegation[] | undefined = await loadData();
   const currentTime = new Date();
   // 30 days back in time
-  currentTime.setDate(currentTime.getDate() - 60);
+  currentTime.setDate(currentTime.getDate() - 90);
   //
   const sortedData = data?.filter((u1: Undelegation) => {
     return u1.COMPLETION_TIME >= currentTime
