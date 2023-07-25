@@ -15,6 +15,7 @@ file_path_in_bucket = 'token_trades_notifier/logs/notifier_logging.csv'
 
 def load_log():
     try:
+        print(f"Trying to load logs from {bucket_name} {file_path_in_bucket}")
         # Load the CSV file from S3
         obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
         df = pd.read_csv(obj['Body'])
