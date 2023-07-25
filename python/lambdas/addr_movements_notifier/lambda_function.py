@@ -11,7 +11,7 @@ import boto3
 s3 = boto3.client('s3')
 
 bucket_name='incioman-data-analysis'
-file_path_in_bucket = 'data/addr_movements_notifier/notifier_logging.csv'
+file_path_in_bucket = 'addr_movements_notifier/logs/notifier_logging.csv'
 
 def load_log():
     try:
