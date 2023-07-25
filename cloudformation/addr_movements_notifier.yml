@@ -54,7 +54,7 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         S3Bucket: incioman-data-analysis # Replace 'your-s3-bucket' with the S3 bucket containing your Lambda code
-        S3Key: artifacts/addr_movements_notifier/lambda.zip # Replace 'lambda_function.zip' with the actual zip file name
+        S3Key: addr_movements_notifier/artifacts/lambda.zip # Replace 'lambda_function.zip' with the actual zip file name
       Timeout: 180 # Set an appropriate timeout for your Lambda function
       Environment: # Add environment variables here
         Variables:
