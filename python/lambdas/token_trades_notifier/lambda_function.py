@@ -18,6 +18,7 @@ def load_log():
         # Load the CSV file from S3
         obj = s3.get_object(Bucket=bucket_name, Key=file_path_in_bucket)
         df = pd.read_csv(obj['Body'])
+        print("Loaded logs", df)
         return df
     except Exception as e:
         print("Error loading logs: ", e)
