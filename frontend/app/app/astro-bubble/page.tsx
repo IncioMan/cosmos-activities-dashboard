@@ -34,7 +34,7 @@ async function loadData(filename: string, returnDate = false) {
     console.log(`Trying s3 folder astro_trading/${dateString}...`)
     const command = new GetObjectCommand({
       Bucket: 'incioman-data-analysis',
-      Key: `astro_trading/${dateString}/${filename}`,
+      Key: `astro_trading/data/summary_for_webapp/${dateString}/${filename}`,
     });
 
     try {
