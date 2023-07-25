@@ -1,4 +1,4 @@
-name: Build and Upload to S3 and Deploy using Cloudformation
+name: Address Movements Notifier - Build and Deploy
 on:
   push:
     branches:
