@@ -161,7 +161,7 @@ def add_balances(df, balances, sell=True):
 def write_to_s3(df, filename, bucket_name='incioman-data-analysis'):
     print(f"Uploading {filename} to {datetime.today().date().strftime('%Y%m%d')} on s3")
     json_string = df.to_json(orient='records')
-    file_path = f"astro_trading/data/summary_for_webapp/{datetime.today().date().strftime('%Y%m%d')}/{filename}"
+    file_path = f"astro_trades/data/summary_for_webapp/{datetime.today().date().strftime('%Y%m%d')}/{filename}"
     boto3.client('s3').put_object(Body=json_string, Bucket=bucket_name, Key=file_path)
 
 def lambda_handler(event, context):
@@ -172,7 +172,7 @@ def lambda_handler(event, context):
     threshold_day = current_date - timedelta(days=40)
 
     bucket_name='incioman-data-analysis'
-    file_path_in_bucket = 'astro_trading/data/raw_swaps/swaps.csv'
+    file_path_in_bucket = 'astro_trades/data/raw_swaps/swaps.csv'
     df = load_swaps(bucket_name, file_path_in_bucket)
     df = get_new_swaps(df, address, current_date, threshold_day)
     upload_swaps(df, bucket_name, file_path_in_bucket)

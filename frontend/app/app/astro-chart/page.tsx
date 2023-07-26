@@ -30,10 +30,10 @@ async function loadData(filename: string, returnDate = false) {
     currentDate.setDate(currentDate.getDate() - i);
     const dateString = getDateFormatted(currentDate)
 
-    console.log(`Trying s3 folder astro_trading/${dateString}...`)
+    console.log(`Trying s3 folder astro_trades/${dateString}...`)
     const command = new GetObjectCommand({
       Bucket: 'incioman-data-analysis',
-      Key: `astro_trading/data/summary_for_webapp/${dateString}/${filename}`,
+      Key: `astro_trades/data/summary_for_webapp/${dateString}/${filename}`,
     });
 
     try {
