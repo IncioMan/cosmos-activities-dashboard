@@ -36,7 +36,7 @@ def get_txs_time_period(address, _from, _to):
 
 def load_swaps(bucket_name, file_path_in_bucket):
     try:
-        print(f"Trying to load swaps from {bucket_name} {file_path_in_bucket}")
+        print(f"Trying pippo to load swaps from {bucket_name} {file_path_in_bucket}")
         # Load the CSV file from S3
         obj = boto3.client('s3').get_object(Bucket=bucket_name, Key=file_path_in_bucket)
         df = pd.read_csv(obj['Body'])
