@@ -36,7 +36,7 @@ def get_txs_time_period(address, _from, _to):
 
 def load_swaps(bucket_name, file_path_in_bucket):
     try:
-        print(f"Trying pippo to load swaps from {bucket_name} {file_path_in_bucket}")
+        print(f"Trying to load swaps from {bucket_name} {file_path_in_bucket}")
         # Load the CSV file from S3
         obj = boto3.client('s3').get_object(Bucket=bucket_name, Key=file_path_in_bucket)
         df = pd.read_csv(obj['Body'])
@@ -53,11 +53,11 @@ def get_new_swaps(df, address, current_date, threshold_day):
         df = get_txs_time_period(address, current_date, threshold_day)
     else:
         if df.timestamp.max().to_pydatetime().replace(tzinfo=None) < current_date:
-            print(f"Filling the upper gap from {current_date.strftime('%Y-%m-%d')} to {df.timestamp.max().to_pydatetime().replace(tzinfo=None).strftime('%Y-%m-%d')}")
+            print(f"Filling the upper gap from {current_date.strftime('%Y-%m-%d %H:%M:%S')} to {df.timestamp.max().to_pydatetime().replace(tzinfo=None).strftime('%Y-%m-%d %H:%M:%S')}")
             tt_df = get_txs_time_period(address, current_date, df.timestamp.max().to_pydatetime().replace(tzinfo=None))
             df = pd.concat([df, tt_df])
         if df.timestamp.min().to_pydatetime().replace(tzinfo=None) > threshold_day:
-            print(f"Filling the lower gap from {threshold_day.strftime('%Y-%m-%d')} to {df.timestamp.min().to_pydatetime().replace(tzinfo=None).strftime('%Y-%m-%d')}")
+            print(f"Filling the lower gap from {threshold_day.strftime('%Y-%m-%d %H:%M:%S')} to {df.timestamp.min().to_pydatetime().replace(tzinfo=None).strftime('%Y-%m-%d %H:%M:%S')}")
             tt_df = get_txs_time_period(address, df.timestamp.min().to_pydatetime().replace(tzinfo=None), threshold_day)
             df = pd.concat([df, tt_df])
     df = df.drop_duplicates(ignore_index=True)
@@ -176,7 +176,7 @@ def lambda_handler(event, context):
     df = load_swaps(bucket_name, file_path_in_bucket)
     df = get_new_swaps(df, address, current_date, threshold_day)
     upload_swaps(df, bucket_name, file_path_in_bucket)
-    process_swaps(df)
+    df = process_swaps(df)
 
     today = datetime.today()
     one_month_earlier = today - timedelta(days=30)
