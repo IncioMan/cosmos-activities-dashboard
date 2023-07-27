@@ -22,6 +22,7 @@ def get_txs_time_period(address, _from, _to):
         print(f"Number of txs received: {len(response.json()['txs'])}")
         
         new_df = pd.DataFrame(response.json()['txs'])
+        
         if _df is None:
             _df = new_df
         else:
