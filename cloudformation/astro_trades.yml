@@ -45,7 +45,7 @@ Resources:
                   - logs:PutLogEvents
                 Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunctionName}-lambda:*"
 
-  LambdaFunction:
+  AstroTradesLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${LambdaFunctionName}-lambda"
@@ -54,31 +54,53 @@ Resources:
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
         S3Bucket: incioman-data-analysis # Replace 'your-s3-bucket' with the S3 bucket containing your Lambda code
-        S3Key: astro_trades/artifacts/lambda.zip # Replace 'lambda_function.zip' with the actual zip file name
+        S3Key: astro_trades/artifacts/astro_trades.zip # Replace 'lambda_function.zip' with the actual zip file name
       Timeout: 180 # Set an appropriate timeout for your Lambda function
 
-  CloudWatchEventRuleSchedule:
+  AstroTradesCloudWatchEventRuleSchedule:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-schedule"
       ScheduleExpression: "rate(6 hours)"
       State: "ENABLED"
       Targets:
-        - Arn: !GetAtt LambdaFunction.Arn
+        - Arn: !GetAtt AstroTradesLambdaFunction.Arn
           Id: !Sub "${LambdaFunctionName}-EventTarget"
 
   LambdaEventPermissionSellAstro:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
+      FunctionName: !GetAtt AstroTradesLambdaFunction.Arn
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleSchedule.Arn   
+      SourceArn: !GetAtt AstroTradesCloudWatchEventRuleSchedule.Arn 
 
-Outputs:
-  LambdaFunctionArn:
-    Description: ARN of the Lambda function
-    Value: !GetAtt LambdaFunction.Arn
-  LambdaExecutionRoleArn:
-    Description: ARN of the IAM role used by the Lambda function
-    Value: !GetAtt LambdaExecutionRole.Arn
+  WhalesDailyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${LambdaFunctionName}-whales-daily-lambda"
+      Handler: lambda_function.lambda_handler # Replace 'index' with the name of your Lambda function file (without the extension)
+      Runtime: python3.9 # Replace with the appropriate runtime if your Lambda function is in a different language
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: incioman-data-analysis # Replace 'your-s3-bucket' with the S3 bucket containing your Lambda code
+        S3Key: astro_trades/artifacts/whales_daily.zip # Replace 'lambda_function.zip' with the actual zip file name
+      Timeout: 180 # Set an appropriate timeout for your Lambda function
+
+  WhalesDailyCloudWatchEventRuleSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-whales-daily-schedule"
+      ScheduleExpression: "rate(12 hours)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt WhalesDailyLambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-EventTarget"
+
+  LambdaEventPermissionSellAstro:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt WhalesDailyLambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt WhalesDailyCloudWatchEventRuleSchedule.Arn

@@ -24,24 +24,43 @@ jobs:
         run: |
           pip install pipenv
 
-      - name: Setup Python environment with pipenv
+      - name: astro_trades - Setup Python environment with pipenv
         run: |
           pipenv install
         working-directory: python/lambdas/astro_trades
       
-      - name: Build zip
+      - name: astro_trades - Build zip
         run: |
           bash ../scripts/package.sh
         working-directory: python/lambdas/astro_trades
         
-      - name: Upload to S3
+      - name: astro_trades - Upload to S3
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-1  # Replace with your actual AWS region
-      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/astro_trades/artifacts/lambda.zip
+      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/astro_trades/artifacts/astro_trades.zip
         working-directory: python/lambdas/astro_trades
+
+      - name: whales_daily - Setup Python environment with pipenv
+        run: |
+          pipenv install
+        working-directory: python/lambdas/whales_daily
+      
+      - name: whales_daily - Build zip
+        run: |
+          bash ../scripts/package.sh
+        working-directory: python/lambdas/whales_daily
+        
+      - name: whales_daily - Upload to S3
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1  # Replace with your actual AWS region
+      - run: aws s3 cp lambda.zip s3://incioman-data-analysis/astro_trades/artifacts/whales_daily.zip
+        working-directory: python/lambdas/whales_daily
 
   deploy_cloudformation:
     runs-on: ubuntu-latest
