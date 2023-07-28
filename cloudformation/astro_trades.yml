@@ -67,7 +67,7 @@ Resources:
         - Arn: !GetAtt AstroTradesLambdaFunction.Arn
           Id: !Sub "${LambdaFunctionName}-EventTarget"
 
-  LambdaEventPermissionSellAstro:
+  AstroTradesLambdaEventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt AstroTradesLambdaFunction.Arn
@@ -97,7 +97,7 @@ Resources:
         - Arn: !GetAtt WhalesDailyLambdaFunction.Arn
           Id: !Sub "${LambdaFunctionName}-EventTarget"
 
-  LambdaEventPermissionSellAstro:
+  WhalesDailyLambdaEventPermission:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt WhalesDailyLambdaFunction.Arn
