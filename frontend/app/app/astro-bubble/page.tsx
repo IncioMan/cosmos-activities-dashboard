@@ -6,6 +6,7 @@ import ClientSideAstroBubblePage from './ClientSideAstroBubblePage';
 import { ITraderSummary, TimeFrame, TraderType } from "@/interfaces/Interfaces";
 
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { loadData } from "@/utils/Utils";
 
 const client = new S3Client({
   region: 'eu-west-1',
@@ -15,50 +16,18 @@ const client = new S3Client({
   }
 })
 
-const getDateFormatted = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
 
-  const dateString = `${year}${month}${day}`;
-  return dateString
-}
-
-async function loadData(filename: string, returnDate = false) {
-  for (let i = 0; i < 30; i++) {
-    const currentDate = new Date();
-
-    currentDate.setDate(currentDate.getDate() - i);
-    const dateString = getDateFormatted(currentDate)
-
-    console.log(`Trying s3 folder astro_trades/${dateString}...`)
-    const command = new GetObjectCommand({
-      Bucket: 'incioman-data-analysis',
-      Key: `astro_trades/data/summary_for_webapp/${dateString}/${filename}`,
-    });
-
-    try {
-      const response = await client.send(command);
-      // The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
-      const str = await response?.Body?.transformToString();
-      if (str && !returnDate) return JSON.parse(str)
-      else return dateString
-    } catch (err) {
-      console.error(err);
-    }
-  }
-};
 
 
 export default async function Home() {
-  const top_today_buyers: ITraderSummary[] | undefined = await loadData("top_today_buyers.json");
-  const top_weekly_buyers: ITraderSummary[] | undefined = await loadData("top_weekly_buyers.json");
-  const top_monthly_buyers: ITraderSummary[] | undefined = await loadData("top_monthly_buyers.json");
-  const top_today_sellers: ITraderSummary[] | undefined = await loadData("top_today_sellers.json");
-  const top_weekly_sellers: ITraderSummary[] | undefined = await loadData("top_weekly_sellers.json");
-  const top_monthly_sellers: ITraderSummary[] | undefined = await loadData("top_monthly_sellers.json");
+  const top_today_buyers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_today_buyers.json");
+  const top_weekly_buyers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_weekly_buyers.json");
+  const top_monthly_buyers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_monthly_buyers.json");
+  const top_today_sellers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_today_sellers.json");
+  const top_weekly_sellers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_weekly_sellers.json");
+  const top_monthly_sellers: ITraderSummary[] | undefined = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_monthly_sellers.json");
 
-  const lastUpdateDate = await loadData("top_today_buyers.json", true);
+  const lastUpdateDate = await loadData(client, 'astro_trades/data/summary_for_webapp/', "top_today_buyers.json", false, true);
   const year = lastUpdateDate.substring(0, 4);
   const month = lastUpdateDate.substring(4, 6);
   const day = lastUpdateDate.substring(6, 8);

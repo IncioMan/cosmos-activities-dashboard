@@ -36,3 +36,8 @@ export enum TraderType {
     Buyers,
     Sellers
 }
+
+export interface AstroWhaleDaily {
+    date: string;
+    astro_amount: number;
+}
