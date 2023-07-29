@@ -68,7 +68,7 @@ export const AstroBarCharWhalesDaily = ({
     return <div className="h-full w-full flex p-4 py-8 justify-center items-center">
         <div className='w-4/7 flex justify-center items-start'>
             <div>
-                <HighchartsReact highcharts={Highcharts} options={options} />;
+                <HighchartsReact highcharts={Highcharts} options={options} />
             </div>
         </div>
     </div>
