@@ -4,6 +4,7 @@ import CosmosBarChart from "../components/CosmosBarChart";
 import CosmosDateFocus from "../components/CosmosDateFocus";
 import { FaGithub, FaTwitter } from 'react-icons/fa';
 
+export const dynamic = 'force-dynamic'
 
 async function loadData() {
   try {

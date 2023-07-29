@@ -6,7 +6,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { AstroWhaleDaily } from "@/interfaces/Interfaces";
 import { loadData } from "@/utils/Utils";
 
-
+export const dynamic = 'force-dynamic'
 
 const client = new S3Client({
   region: 'eu-west-1',

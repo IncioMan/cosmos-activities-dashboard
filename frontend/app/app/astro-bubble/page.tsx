@@ -8,6 +8,9 @@ import { ITraderSummary, TimeFrame, TraderType } from "@/interfaces/Interfaces";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { loadData } from "@/utils/Utils";
 
+
+export const dynamic = 'force-dynamic'
+
 const client = new S3Client({
   region: 'eu-west-1',
   credentials: {
