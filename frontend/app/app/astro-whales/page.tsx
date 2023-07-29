@@ -2,8 +2,7 @@ import "primereact/resources/themes/md-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import ClientSideAstroWhalesDailyPage from './ClientSideAstroWhalesDailyPage';
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import data from "../../data/whales_daily_20230729.json"
+import { S3Client } from "@aws-sdk/client-s3";
 import { AstroWhaleDaily } from "@/interfaces/Interfaces";
 import { loadData } from "@/utils/Utils";
 
