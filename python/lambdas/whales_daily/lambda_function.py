@@ -53,7 +53,7 @@ def lambda_handler(event, context):
         .sort_values(by='astro_amount').head()
     
     whales_daily = whales.merge(daily_delta[daily_delta.date>='2023-07-01'],on='traderAddress', how='left').fillna(0)
-    tt = whales_daily[whales_daily.date != 0][['date','astro_amount']].groupby('date').sum()
+    tt = whales_daily[whales_daily.date != 0][['date','astro_amount']].groupby('date').sum().reset_index().sort_values(by='date')
     write_to_s3(tt, file_path = f"astro_trades/data/whales_daily_delta/{datetime.today().date().strftime('%Y%m%d')}.json")
     tt = whales_daily[whales_daily.date!=0][['address','date','astro_amount']]\
                         .groupby(['address','date'])\
