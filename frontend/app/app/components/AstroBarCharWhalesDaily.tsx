@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Vega } from 'react-vega';
 import { AstroWhaleDaily } from '@/interfaces/Interfaces';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import HCMore from 'highcharts/highcharts-more';
-HCMore(Highcharts);
+import React from 'react'
+import Highcharts from 'highcharts'
+import HighchartsExporting from 'highcharts/modules/exporting'
+import HighchartsReact from 'highcharts-react-official'
+
+if (typeof Highcharts === 'object') {
+    HighchartsExporting(Highcharts)
+}
 
 interface props {
     data: AstroWhaleDaily[]
