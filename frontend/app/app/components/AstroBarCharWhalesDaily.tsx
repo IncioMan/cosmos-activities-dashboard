@@ -28,6 +28,9 @@ export const AstroBarCharWhalesDaily = ({
                 color: '#ffffff', // Set the text color to white
             },
         },
+        exporting: {
+            enabled: false, // Disable the exporting module
+        },
         xAxis: {
             type: 'datetime',
             labels: {
