@@ -10,6 +10,7 @@ import { loadData } from "@/utils/Utils";
 
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 const client = new S3Client({
   region: 'eu-west-1',

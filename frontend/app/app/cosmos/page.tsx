@@ -5,6 +5,7 @@ import CosmosDateFocus from "../components/CosmosDateFocus";
 import { FaGithub, FaTwitter } from 'react-icons/fa';
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 async function loadData() {
   try {
