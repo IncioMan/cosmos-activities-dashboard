@@ -51,9 +51,9 @@ export default function Home({
 
     return (
         <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
-            className="h-screen">
+            className="md:h-screen">
             {/* HEADER*/}
-            <div className="flex flex-row">
+            <div className="flex flex-col md:flex-row">
                 <Image src={imageFile} alt="Description of the image" width={200} />
                 <div className="flex-1 text-white text-sm flex justify-around items-center p-4">
                     <div className="flex align-items-center">
@@ -92,7 +92,7 @@ export default function Home({
             </div>
             {/* BODY */}
             <div className="h-[80%] flex flex-1 items-center justify-center">
-                <div className="w-[1200px] h-[90%] flex justify-center items-center">
+                <div className="w-full md:w-[80%] h-[80%] flex flex-col md:flex-row justify-center items-center">
                     <AstroBubbleChartTraders
                         width={500}
                         height={500}
@@ -128,13 +128,15 @@ export default function Home({
                 </div>
             </div>
             {/* FOOTER */}
-            <div className="flex justify-center items-end space-x-4">
-                <a href="https://github.com/IncioMan" target="_blank">
-                    <FaGithub style={{ fontSize: '25px' }} color="#ffffff" />
-                </a>
-                <a href="https://twitter.com/IncioMan" target="_blank">
-                    <FaTwitter style={{ fontSize: '25px' }} color="#ffffff" />
-                </a>
+            <div className="flex justify-center items-center space-x-4 min-h-[80px] md:min-h-fit md:pt-4">
+                <div className="flex space-x-2">
+                    <a href="https://github.com/IncioMan" target="_blank">
+                        <FaGithub style={{ fontSize: '25px' }} color="#ffffff" />
+                    </a>
+                    <a href="https://twitter.com/IncioMan" target="_blank">
+                        <FaTwitter style={{ fontSize: '25px' }} color="#ffffff" />
+                    </a>
+                </div>
             </div>
         </div>
     )
