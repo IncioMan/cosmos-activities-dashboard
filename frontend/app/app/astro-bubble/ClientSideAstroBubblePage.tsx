@@ -94,7 +94,7 @@ export default function Home({
             </div>
             {/* BODY */}
             <div className="h-[70%] md:h-[80%] flex flex-1 items-center justify-center">
-                <div className="w-full md:w-[80%] h-[80%] flex flex-col md:flex-row justify-center items-center overflow-scroll md:overflow-hidden pt-[35%] md:pt-0">
+                <div className="w-full md:w-[90%] h-[90%] flex flex-col md:flex-row justify-center items-center overflow-scroll pt-[35%] md:pt-0">
                     <AstroBubbleChartTraders
                         width={500}
                         height={500}
