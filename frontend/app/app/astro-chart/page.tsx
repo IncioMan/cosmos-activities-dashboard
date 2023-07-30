@@ -34,8 +34,7 @@ export default async function Home() {
   const formatteLastUpdateDate = `${year}-${month}-${day}`;
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
-      className="h-screen">
+    <div>
       <ClientSideAstroChartPage
         top_today_sellers={top_today_sellers ? top_today_sellers : []}
         top_today_buyers={top_today_buyers ? top_today_buyers : []}

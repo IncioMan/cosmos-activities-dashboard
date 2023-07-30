@@ -69,7 +69,7 @@ export function AstroScatterChartTraders({
 
 
     const options = {
-        responsive: true,
+        maintainAspectRatio: false,
         onHover: (event: any, chartElement: any) => {
             event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
         },
@@ -84,7 +84,6 @@ export function AstroScatterChartTraders({
                 }
             }
         },
-        maintainAspectRatio: false,
         scales: {
             x: {
                 title: {
