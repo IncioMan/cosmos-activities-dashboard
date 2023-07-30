@@ -51,10 +51,12 @@ export default function Home({
 
     return (
         <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
-            className="md:h-screen">
+            className="h-screen">
             {/* HEADER*/}
-            <div className="flex flex-col md:flex-row">
-                <Image src={imageFile} alt="Description of the image" width={200} />
+            <div className="h-[20%] flex flex-col md:flex-row md:h-[10%]">
+                <div className="flex justify-center items-center">
+                    <Image src={imageFile} alt="Description of the image" width={200} />
+                </div>
                 <div className="flex-1 text-white text-sm flex justify-around items-center p-4">
                     <div className="flex align-items-center">
                         <Checkbox
@@ -91,8 +93,8 @@ export default function Home({
                 </div>
             </div>
             {/* BODY */}
-            <div className="h-[80%] flex flex-1 items-center justify-center">
-                <div className="w-full md:w-[80%] h-[80%] flex flex-col md:flex-row justify-center items-center">
+            <div className="h-[70%] md:h-[80%] flex flex-1 items-center justify-center">
+                <div className="w-full md:w-[80%] h-[80%] flex flex-col md:flex-row justify-center items-center overflow-scroll md:overflow-hidden pt-[35%] md:pt-0">
                     <AstroBubbleChartTraders
                         width={500}
                         height={500}
@@ -128,7 +130,7 @@ export default function Home({
                 </div>
             </div>
             {/* FOOTER */}
-            <div className="flex justify-center items-center space-x-4 min-h-[80px] md:min-h-fit md:pt-4">
+            <div className="flex justify-center items-center space-x-4 h-[10%] md:h-[10%]">
                 <div className="flex space-x-2">
                     <a href="https://github.com/IncioMan" target="_blank">
                         <FaGithub style={{ fontSize: '25px' }} color="#ffffff" />

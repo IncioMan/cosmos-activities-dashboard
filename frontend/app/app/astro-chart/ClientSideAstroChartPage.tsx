@@ -42,10 +42,12 @@ export default function ClientSideAstroChartPage({
 
     return (
         <div style={{ background: 'linear-gradient(to bottom, #041339, #37609f)' }}
-            className="md:h-screen">
+            className="h-screen">
             {/* HEADER*/}
-            <div className="flex flex-col md:flex-row">
-                <Image src={imageFile} alt="Description of the image" width={200} />
+            <div className="h-[20%] flex flex-col md:flex-row md:h-[10%]">
+                <div className="flex justify-center items-center">
+                    <Image src={imageFile} alt="Description of the image" width={200} />
+                </div>
                 <Tooltip target=".info-icon" />
                 <div className="flex-1 text-white text-sm flex justify-around items-center p-4">
                     <div className="flex align-items-center">
@@ -83,7 +85,7 @@ export default function ClientSideAstroChartPage({
                 </div>
             </div>
             {/* BODY */}
-            <div className="h-[82%] flex flex-1 items-center justify-center">
+            <div className="h-[70%] md:h-[80%] flex flex-1 items-center justify-center">
                 <div className="w-full md:w-[80%] h-[80%] flex justify-center items-center">
                     <AstroScatterChartTraders
                         excludeNoHolder={excludeNoAstroHoldingsAddress}
@@ -98,7 +100,7 @@ export default function ClientSideAstroChartPage({
                 </div>
             </div>
             {/* FOOTER */}
-            <div className="flex justify-center items-center space-x-4 min-h-[80px] md:min-h-fit">
+            <div className="flex justify-center items-center space-x-4 h-[10%] md:h-[10%]">
                 <div className="flex space-x-2">
                     <a href="https://github.com/IncioMan" target="_blank">
                         <FaGithub style={{ fontSize: '25px' }} color="#ffffff" />
