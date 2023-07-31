@@ -91,7 +91,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-whales-daily-schedule"
-      ScheduleExpression: "rate(12 hours)"
+      ScheduleExpression: "rate(6 hours)"
       State: "ENABLED"
       Targets:
         - Arn: !GetAtt WhalesDailyLambdaFunction.Arn
