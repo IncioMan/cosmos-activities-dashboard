@@ -101,7 +101,7 @@ Resources:
             {
                 "address": "cosmos1vgmc2vmrhm36wxek05ysyesevxz3p3wuazjygk",
                 "notifier_id": 1,
-                "start_date": "2023-07-23",
+                "start_date": "2023-08-10",
                 "address_desc": "Received 400k ATOM on 9th of August from a 4 hops address who undelegated 700k in the 8th",
                 "finder_tx": "https://www.mintscan.io/cosmos/transactions/",
                 "finder_address": "https://www.mintscan.io/cosmos/accounts/"
