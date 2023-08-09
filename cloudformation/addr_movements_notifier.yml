@@ -61,7 +61,7 @@ Resources:
           BOT_TOKEN: !Ref BotTokenValue
           CHAT_ID: 92383009
 
-  CloudWatchEventRuleCosmosxy5s8c:
+  CloudWatchEventRuleCosmos-xy5s8c:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-cosmos-xy5s8c"
@@ -80,13 +80,40 @@ Resources:
                 "finder_address": "https://www.mintscan.io/cosmos/accounts/"
             }
 
-  LambdaEventPermissionCosmosxy5s8c:
+  LambdaEventPermissionCosmos-xy5s8c:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleCosmosxy5s8c.Arn    
+      SourceArn: !GetAtt CloudWatchEventRuleCosmos-xy5s8c.Arn    
+
+  CloudWatchEventRuleCosmos-azjygk:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub "${LambdaFunctionName}-cosmos-azjygk"
+      ScheduleExpression: "rate(1 day)"
+      State: "ENABLED"
+      Targets:
+        - Arn: !GetAtt LambdaFunction.Arn
+          Id: !Sub "${LambdaFunctionName}-EventTarget"
+          Input: |
+            {
+                "address": "cosmos1vgmc2vmrhm36wxek05ysyesevxz3p3wuazjygk",
+                "notifier_id": 1,
+                "start_date": "2023-07-23",
+                "address_desc": "Received 400k ATOM on 9th of August from a 4 hops address who undelegated 700k in the 8th",
+                "finder_tx": "https://www.mintscan.io/cosmos/transactions/",
+                "finder_address": "https://www.mintscan.io/cosmos/accounts/"
+            }
+
+  LambdaEventPermissionCosmos_xy5s8c:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt CloudWatchEventRuleCosmos-azjygk.Arn  
 
 Outputs:
   LambdaFunctionArn:
