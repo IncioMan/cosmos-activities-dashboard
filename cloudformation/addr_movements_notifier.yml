@@ -61,7 +61,7 @@ Resources:
           BOT_TOKEN: !Ref BotTokenValue
           CHAT_ID: 92383009
 
-  CloudWatchEventRuleCosmos_xy5s8c:
+  CloudWatchEventRuleCosmosXy5s8c:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-cosmos-xy5s8c"
@@ -80,15 +80,15 @@ Resources:
                 "finder_address": "https://www.mintscan.io/cosmos/accounts/"
             }
 
-  LambdaEventPermissionCosmos_xy5s8c:
+  LambdaEventPermissionCosmosXy5s8c:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleCosmos_xy5s8c.Arn    
+      SourceArn: !GetAtt CloudWatchEventRuleCosmosXy5s8c.Arn    
 
-  CloudWatchEventRuleCosmos_azjygk:
+  CloudWatchEventRuleCosmosAzjygk:
     Type: AWS::Events::Rule
     Properties:
       Name: !Sub "${LambdaFunctionName}-cosmos-azjygk"
@@ -107,13 +107,13 @@ Resources:
                 "finder_address": "https://www.mintscan.io/cosmos/accounts/"
             }
 
-  LambdaEventPermissionCosmos_azjygk:
+  LambdaEventPermissionCosmosAzjygk:
     Type: AWS::Lambda::Permission
     Properties:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleCosmos_azjygk.Arn  
+      SourceArn: !GetAtt CloudWatchEventRuleCosmosAzjygk.Arn  
 
 Outputs:
   LambdaFunctionArn:
