@@ -86,34 +86,7 @@ Resources:
       FunctionName: !GetAtt LambdaFunction.Arn
       Action: 'lambda:InvokeFunction'
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleCosmosXy5s8c.Arn    
-
-  CloudWatchEventRuleCosmosAzjygk:
-    Type: AWS::Events::Rule
-    Properties:
-      Name: !Sub "${LambdaFunctionName}-cosmos-azjygk"
-      ScheduleExpression: "rate(1 day)"
-      State: "ENABLED"
-      Targets:
-        - Arn: !GetAtt LambdaFunction.Arn
-          Id: !Sub "${LambdaFunctionName}-EventTarget"
-          Input: |
-            {
-                "address": "cosmos1vgmc2vmrhm36wxek05ysyesevxz3p3wuazjygk",
-                "notifier_id": 1,
-                "start_date": "2023-08-10",
-                "address_desc": "Received 400k ATOM on 9th of August from a 4 hops address who undelegated 700k in the 8th",
-                "finder_tx": "https://www.mintscan.io/cosmos/transactions/",
-                "finder_address": "https://www.mintscan.io/cosmos/accounts/"
-            }
-
-  LambdaEventPermissionCosmosAzjygk:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt LambdaFunction.Arn
-      Action: 'lambda:InvokeFunction'
-      Principal: events.amazonaws.com
-      SourceArn: !GetAtt CloudWatchEventRuleCosmosAzjygk.Arn  
+      SourceArn: !GetAtt CloudWatchEventRuleCosmosXy5s8c.Arn     
 
 Outputs:
   LambdaFunctionArn:
